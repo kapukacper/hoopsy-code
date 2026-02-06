@@ -27,16 +27,12 @@ function salient_child_enqueue_styles() {
     }
 }
 
-// Lista produktów dla boxów wysyłki/zaufania
-function hoopsy_trust_product_ids() {
-    return [13396, 12140, 13756];
-}
 
 function hoopsy_is_trust_product($product = null) {
     if (!$product instanceof WC_Product) {
         return false;
     }
-    return in_array((int) $product->get_id(), hoopsy_trust_product_ids(), true);
+    return true;
 }
 
 /**
@@ -556,138 +552,268 @@ function hoopsy_custom_product_rating() {
  * 5) STICKY ADD TO CART (MOBILE) - produkt 15220
  * =======================================================*/
 
-add_action('wp_footer', function() {
-    if (!is_product()) return;
+add_action('wp_footer', function () {
+  $KC_STICKY_ATC_PRODUCT_IDS = [15220];
 
-    global $product;
-    if (!$product instanceof WC_Product) return;
-    if ((int) $product->get_id() !== 15220) return;
-    if (!$product->is_purchasable() || !$product->is_in_stock()) return;
+  if (!function_exists('is_product') || !is_product()) return;
 
-    $pid         = (int) $product->get_id();
-    $is_variable = $product->is_type('variable');
-    $title       = wp_strip_all_tags($product->get_name());
-    $price_html  = $product->get_price_html();
-    $img_url     = get_the_post_thumbnail_url($pid, 'thumbnail');
-    if (!$img_url) {
-        $img_url = wc_placeholder_img_src('thumbnail');
-    }
+  global $product;
+  if (!$product instanceof WC_Product) return;
 
-    $add_to_cart_base = esc_url(add_query_arg('add-to-cart', $pid, wc_get_cart_url()));
-    ?>
-    <div class="kc-sticky-atc" id="kc-sticky-atc" aria-hidden="true">
-      <div class="kc-sticky-atc__inner">
-        <div class="kc-sticky-atc__left">
-          <img class="kc-sticky-atc__img" src="<?php echo esc_url($img_url); ?>" alt="">
-          <div class="kc-sticky-atc__meta">
-            <div class="kc-sticky-atc__title"><?php echo esc_html($title); ?></div>
-            <div class="kc-sticky-atc__price"><?php echo wp_kses_post($price_html); ?></div>
-          </div>
+  $pid = (int) $product->get_id();
+  if (!in_array($pid, $KC_STICKY_ATC_PRODUCT_IDS, true)) return;
+
+  if (!$product->is_purchasable() || !$product->is_in_stock()) return;
+
+  $is_variable  = $product->is_type('variable');
+  $price_html   = $product->get_price_html();
+  $shipping     = hoopsy_get_shipping_meta($pid);
+  $shipping_txt = $shipping['left'];
+
+  $add_to_cart_base = esc_url(add_query_arg('add-to-cart', $pid, wc_get_cart_url()));
+  ?>
+  <div class="kc-sticky-atc" id="kc-sticky-atc" aria-hidden="true">
+    <div class="kc-sticky-atc__inner">
+      <div class="kc-sticky-atc__left">
+        <div class="kc-sticky-atc__line1">
+          <span class="kc-sticky-atc__price"><?php echo wp_kses_post($price_html); ?></span>
         </div>
 
-        <div class="kc-sticky-atc__right">
-          <div class="kc-sticky-atc__qty">
-            <button type="button" class="kc-qty-btn" data-delta="-1" aria-label="Zmniejsz ilość">−</button>
-            <input type="number" min="1" step="1" value="1" class="kc-qty-input" inputmode="numeric">
-            <button type="button" class="kc-qty-btn" data-delta="1" aria-label="Zwiększ ilość">+</button>
-          </div>
-
-          <?php if ($is_variable): ?>
-            <button type="button" class="kc-sticky-atc__btn kc-sticky-atc__btn--scroll">Wybierz wariant</button>
-          <?php else: ?>
-            <a href="<?php echo $add_to_cart_base; ?>" class="kc-sticky-atc__btn kc-sticky-atc__btn--add" rel="nofollow">Dodaj do koszyka</a>
-          <?php endif; ?>
+        <div class="kc-sticky-atc__line2">
+          <span class="pasek-wysylka-dot" aria-hidden="true"></span>
+          <span>Wysyłka: <strong><?php echo esc_html($shipping_txt); ?></strong></span>
         </div>
       </div>
+
+      <div class="kc-sticky-atc__right">
+        <?php if ($is_variable): ?>
+          <button type="button" class="kc-sticky-atc__btn kc-sticky-atc__btn--scroll">Wybierz wariant</button>
+        <?php else: ?>
+          <a href="<?php echo $add_to_cart_base; ?>" class="kc-sticky-atc__btn kc-sticky-atc__btn--add" rel="nofollow">Dodaj do koszyka</a>
+        <?php endif; ?>
+      </div>
     </div>
+  </div>
 
-    <style>
-      .kc-sticky-atc{display:none;}
-      @media (max-width:768px){
-        .kc-sticky-atc{
-          display:block;position:fixed;left:0;right:0;bottom:0;z-index:999999;
-          transform:translateY(110%);transition:transform .28s ease,opacity .28s ease;
-          opacity:0;pointer-events:none;padding:10px 10px calc(10px + env(safe-area-inset-bottom));
-        }
-        .kc-sticky-atc.is-visible{transform:translateY(0);opacity:1;pointer-events:auto;}
-        .kc-sticky-atc__inner{
-          max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
-          background:rgba(255,255,255,.96);border:1px solid rgba(0,0,0,.08);box-shadow:0 14px 30px rgba(0,0,0,.18);
-          border-radius:14px;padding:10px 12px;backdrop-filter:blur(8px);
-        }
-        .kc-sticky-atc__left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
-        .kc-sticky-atc__img{width:44px;height:44px;object-fit:cover;border-radius:10px;flex:0 0 auto;}
-        .kc-sticky-atc__meta{min-width:0;display:flex;flex-direction:column;gap:2px;}
-        .kc-sticky-atc__title{font-size:13px;line-height:1.15;color:rgba(0,0,0,.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw;}
-        .kc-sticky-atc__price{font-size:13px;line-height:1.1;color:rgba(0,0,0,.78);}
-        .kc-sticky-atc__right{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
-        .kc-sticky-atc__qty{display:inline-flex;align-items:center;border:1px solid rgba(0,0,0,.1);border-radius:12px;overflow:hidden;background:#fff;}
-        .kc-qty-btn{width:36px;height:36px;border:0;background:transparent;cursor:pointer;font-size:18px;line-height:1;color:rgba(0,0,0,.75);}
-        .kc-qty-input{width:46px;height:36px;border:0;text-align:center;font-size:14px;outline:none;}
-        .kc-sticky-atc__btn{
-          height:38px;display:inline-flex;align-items:center;justify-content:center;padding:0 14px;border-radius:12px;
-          text-decoration:none !important;border:0;cursor:pointer;background:#028eb9;color:#fff !important;
-          font-size:14px;font-weight:700;box-shadow:0 10px 22px rgba(0,0,0,.16);white-space:nowrap;
-        }
-        @media (max-width:520px){
-          .kc-sticky-atc__inner{padding:10px;}
-          .kc-sticky-atc__img{width:40px;height:40px;}
-          .kc-sticky-atc__title{max-width:44vw;font-size:12px;}
-          .kc-sticky-atc__btn{padding:0 12px;font-size:13px;}
-          .kc-qty-btn{width:34px;height:34px;}
-          .kc-qty-input{height:34px;}
-        }
-        .kc-sticky-highlight{outline:3px solid rgba(2,142,185,.35);outline-offset:6px;border-radius:12px;transition:outline .2s ease;}
+  <style>
+    .kc-sticky-atc{ display:none; }
+
+    @media (max-width: 768px){
+      :root{ --kc-sticky-h: 66px; }
+
+      body.kc-sticky-atc-on{
+        padding-bottom: calc(var(--kc-sticky-h) + 16px + env(safe-area-inset-bottom)) !important;
       }
-    </style>
 
-    <script>
+      .kc-sticky-atc{
+        display:block;
+        position: fixed;
+        left: 10px; right: 10px; bottom: 10px;
+        z-index: 999999;
+        transform: translateY(120%);
+        opacity: 0;
+        transition: transform .22s ease, opacity .22s ease;
+        pointer-events: none;
+      }
+      .kc-sticky-atc.is-visible{
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .kc-sticky-atc__inner{
+        width: 100%;
+        max-width: 560px;
+        margin: 0 auto;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        background: rgba(255,255,255,.98);
+        border: 1px solid rgba(0,0,0,.10);
+        box-shadow: 0 12px 26px rgba(0,0,0,.16);
+        border-radius: 14px;
+        padding: 10px 10px;
+        backdrop-filter: blur(10px);
+        min-height: var(--kc-sticky-h);
+        box-sizing: border-box;
+      }
+
+      .kc-sticky-atc__left{
+        display:flex;
+        flex-direction:column;
+        gap:4px;
+        min-width:0;
+        flex:1 1 auto;
+      }
+
+      .kc-sticky-atc__line1{
+        display:flex;
+        align-items:baseline;
+        gap:8px;
+        flex-wrap:nowrap;
+        min-width:0;
+      }
+
+      .kc-sticky-atc__price{
+        font-size: 14px;
+        line-height:1.1;
+        color: rgba(0,0,0,.85);
+        white-space: nowrap;
+      }
+      .kc-sticky-atc__price del,
+      .kc-sticky-atc__price ins{
+        display:inline !important;
+        white-space: nowrap !important;
+      }
+      .kc-sticky-atc__price ins{ text-decoration: none !important; }
+      .kc-sticky-atc__price ins .amount,
+      .kc-sticky-atc__price ins bdi{
+        color: #2e7d32 !important;
+        font-weight: 800 !important;
+      }
+
+      .kc-sticky-atc__line2{
+        font-size: 13px;
+        line-height:1.1;
+        color: rgba(0,0,0,.68);
+        white-space: nowrap;
+        overflow: visible;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding-left: 4px;
+      }
+      .kc-sticky-atc__line2 > span:last-child{
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .kc-sticky-atc__line2 strong{
+        color: rgba(0,0,0,.86);
+        font-weight: 900;
+      }
+
+      .kc-sticky-atc .pasek-wysylka-dot{
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #1ec13a;
+        box-shadow: 0 0 0 0 rgba(30,193,58,.7);
+        animation: kc-sticky-dot-blink 1.4s infinite ease-out;
+        flex: 0 0 9px;
+        display: inline-block;
+      }
+
+      @keyframes kc-sticky-dot-blink{
+        0%{ box-shadow: 0 0 0 0 rgba(30,193,58,.7); opacity: 1; }
+        60%{ box-shadow: 0 0 0 8px rgba(30,193,58,0); opacity: .5; }
+        100%{ box-shadow: 0 0 0 0 rgba(30,193,58,0); opacity: 1; }
+      }
+
+      .kc-sticky-atc__right{
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        flex: 0 0 44%;
+        min-width: 170px;
+      }
+
+      .kc-sticky-atc__btn{
+        height: 38px !important;
+        width: 100%;
+        min-width: 170px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding: 0 14px !important;
+        border-radius: 12px;
+        border:0 !important;
+        cursor:pointer;
+        text-decoration:none !important;
+        background:#f84077 !important;
+        color:#fff !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,.14);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 390px){
+        :root{ --kc-sticky-h: 64px; }
+        .kc-sticky-atc__price{ font-size: 13px; }
+        .kc-sticky-atc__line2{ font-size: 12px; }
+      }
+
+      .kc-sticky-highlight{
+        outline: 3px solid rgba(248,64,119,.28);
+        outline-offset: 6px;
+        border-radius: 12px;
+        transition: outline .2s ease;
+      }
+    }
+  </style>
+
+  <script>
     (function(){
       const bar = document.getElementById('kc-sticky-atc');
       if(!bar) return;
 
       const MQ = window.matchMedia('(max-width: 768px)');
-      const formCart = document.querySelector('form.cart');
+      const formCart = document.querySelector('form.cart, form.variations_form');
+      const scrollTarget = formCart || document.querySelector('.single_add_to_cart_button') || document.querySelector('form.cart');
 
-      if (!formCart || !MQ.matches) {
-        return;
-      }
+      function toggleSticky(){
+        if(!scrollTarget) return;
 
-      function toggleSticky() {
-        if (!MQ.matches) {
+        if(!MQ.matches){
           bar.classList.remove('is-visible');
           bar.setAttribute('aria-hidden','true');
+          document.body.classList.remove('kc-sticky-atc-on');
           return;
         }
-        const below = formCart.getBoundingClientRect().bottom < 0;
-        bar.classList.toggle('is-visible', below);
-        bar.setAttribute('aria-hidden', below ? 'false' : 'true');
+
+        const rect = scrollTarget.getBoundingClientRect();
+        const below = (rect.bottom < 0);
+
+        if(below){
+          bar.classList.add('is-visible');
+          bar.setAttribute('aria-hidden','false');
+          document.body.classList.add('kc-sticky-atc-on');
+        } else {
+          bar.classList.remove('is-visible');
+          bar.setAttribute('aria-hidden','true');
+          document.body.classList.remove('kc-sticky-atc-on');
+        }
       }
 
-      const qtyInput = bar.querySelector('.kc-qty-input');
-      bar.querySelectorAll('.kc-qty-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const delta = parseInt(btn.getAttribute('data-delta'), 10) || 0;
-          qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) + delta);
-        });
-      });
+      const addLink   = bar.querySelector('.kc-sticky-atc__btn--add');
+      const scrollBtn = bar.querySelector('.kc-sticky-atc__btn--scroll');
 
-      const addLink = bar.querySelector('.kc-sticky-atc__btn--add');
-      if (addLink) {
+      if(addLink){
         addLink.addEventListener('click', () => {
-          const q = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+          let q = 1;
+          const mainQty = document.querySelector('form.cart input.qty');
+          if(mainQty){
+            const v = parseInt(mainQty.value, 10);
+            if(Number.isFinite(v) && v > 0) q = v;
+          }
           const url = new URL(addLink.href, window.location.origin);
           url.searchParams.set('quantity', String(q));
           addLink.href = url.toString();
         });
       }
 
-      const scrollBtn = bar.querySelector('.kc-sticky-atc__btn--scroll');
-      if (scrollBtn) {
+      if(scrollBtn){
         scrollBtn.addEventListener('click', () => {
-          formCart.scrollIntoView({behavior:'smooth', block:'center'});
-          formCart.classList.add('kc-sticky-highlight');
-          setTimeout(() => formCart.classList.remove('kc-sticky-highlight'), 900);
+          if(!scrollTarget) return;
+          scrollTarget.scrollIntoView({behavior:'smooth', block:'center'});
+          if(formCart){
+            formCart.classList.add('kc-sticky-highlight');
+            setTimeout(()=>formCart.classList.remove('kc-sticky-highlight'), 900);
+          }
         });
       }
 
@@ -695,8 +821,8 @@ add_action('wp_footer', function() {
       window.addEventListener('scroll', toggleSticky, {passive:true});
       window.addEventListener('resize', toggleSticky);
     })();
-    </script>
-    <?php
+  </script>
+  <?php
 }, 99);
 
 /* =========================================================
@@ -727,7 +853,7 @@ add_action('woocommerce_single_product_summary', function() {
     if (!is_product()) return;
 
     global $product;
-    if (!$product || (int) $product->get_id() !== 13756) return;
+    if (!$product || !in_array((int) $product->get_id(), [13756, 15220], true)) return;
 
     echo '<span class="dn-price-hs dn-price-hs--standalone" aria-hidden="true">'
         . do_shortcode('[dn_hurrystock_inline id="7866" label="Pozostało" suffix="szt."]')
@@ -738,7 +864,7 @@ add_action('wp_footer', function() {
     if (!is_product()) return;
 
     global $product;
-    if (!$product || (int) $product->get_id() !== 13756) return;
+    if (!$product || !in_array((int) $product->get_id(), [13756, 15220], true)) return;
     ?>
     <script>
     (function(){
@@ -774,8 +900,8 @@ add_action('wp_footer', function() {
       }
 
       function moveBadgeIntoPrice(){
-        var price = document.querySelector('body.single-product.postid-13756 .summary.entry-summary p.price');
-        var badge = document.querySelector('body.single-product.postid-13756 .summary.entry-summary .dn-price-hs--standalone');
+        var price = document.querySelector('body.single-product .summary.entry-summary p.price');
+        var badge = document.querySelector('body.single-product .summary.entry-summary .dn-price-hs--standalone');
         if(!price || !badge) return false;
         if(price.querySelector('.dn-price-hs--standalone')) return true;
 
@@ -827,14 +953,14 @@ add_action('wp_head', function() {
     if (!is_product()) return;
 
     global $product;
-    if (!$product || (int) $product->get_id() !== 13756) return;
+    if (!$product || !in_array((int) $product->get_id(), [13756, 15220], true)) return;
 
     $sale_badge_img = 'https://medicane.pl/wp-content/uploads/2026/01/discount_10703149.png';
     ?>
     <style>
-      body.single-product.postid-13756 .summary.entry-summary .dn-price-hs--standalone { display:none; }
+      body.single-product .summary.entry-summary .dn-price-hs--standalone { display:none; }
 
-      body.single-product.postid-13756 .summary.entry-summary p.price.dn-price-hs-row {
+      body.single-product .summary.entry-summary p.price.dn-price-hs-row {
         display:flex !important;
         align-items:center !important;
         gap:10px;
@@ -842,14 +968,14 @@ add_action('wp_head', function() {
         white-space:nowrap !important;
       }
 
-      body.single-product.postid-13756 .summary.entry-summary p.price.dn-price-hs-row del,
-      body.single-product.postid-13756 .summary.entry-summary p.price.dn-price-hs-row ins {
+      body.single-product .summary.entry-summary p.price.dn-price-hs-row del,
+      body.single-product .summary.entry-summary p.price.dn-price-hs-row ins {
         display:inline-flex !important;
         align-items:center !important;
         white-space:nowrap !important;
       }
 
-      body.single-product.postid-13756 .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs {
+      body.single-product .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs {
         margin-left:0 !important;
         display:inline-flex !important;
         align-self:center !important;
@@ -916,7 +1042,7 @@ add_action('wp_head', function() {
       }
 
       @media (max-width:480px){
-        body.single-product.postid-13756 .summary.entry-summary p.price.dn-price-hs-row { gap:8px; }
+        body.single-product .summary.entry-summary p.price.dn-price-hs-row { gap:8px; }
 
         .dn-hurrystock-inline {
           font-size:14px;
@@ -955,3 +1081,205 @@ add_action('wp_head', function() {
     </style>
     <?php
 });
+
+/* =========================================================
+ * 7) CHECKOUT MOBILE - MINI KOSZYK NA GÓRZE + +/- ILOŚĆ
+ * =======================================================*/
+
+add_filter('woocommerce_checkout_cart_item_quantity', function($quantity_html, $cart_item, $cart_item_key) {
+    if (!is_checkout()) {
+        return $quantity_html;
+    }
+
+    $qty = max(1, (int) $cart_item['quantity']);
+    $key = esc_attr($cart_item_key);
+
+    return '<span class="hoopsy-qty-desktop">&times;&nbsp;' . $qty . '</span>'
+        . '<span class="hoopsy-qty-mobile" data-cart-key="' . $key . '">' 
+        . '<button type="button" class="hoopsy-qty-btn" data-delta="-1" aria-label="Zmniejsz ilość">-</button>'
+        . '<span class="hoopsy-qty-value">' . $qty . '</span>'
+        . '<button type="button" class="hoopsy-qty-btn" data-delta="1" aria-label="Zwiększ ilość">+</button>'
+        . '</span>';
+}, 20, 3);
+
+add_action('wp_ajax_hoopsy_update_checkout_qty', 'hoopsy_update_checkout_qty');
+add_action('wp_ajax_nopriv_hoopsy_update_checkout_qty', 'hoopsy_update_checkout_qty');
+function hoopsy_update_checkout_qty() {
+    check_ajax_referer('hoopsy_checkout_qty', 'nonce');
+
+    if (!WC()->cart) {
+        wp_send_json_error(['message' => 'Brak koszyka.'], 400);
+    }
+
+    $key = isset($_POST['cart_item_key']) ? wc_clean(wp_unslash($_POST['cart_item_key'])) : '';
+    $qty = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
+    $qty = max(1, $qty);
+
+    $cart = WC()->cart->get_cart();
+    if (!$key || !isset($cart[$key])) {
+        wp_send_json_error(['message' => 'Nie znaleziono produktu w koszyku.'], 404);
+    }
+
+    WC()->cart->set_quantity($key, $qty, true);
+    WC()->cart->calculate_totals();
+
+    wp_send_json_success(['qty' => $qty]);
+}
+
+add_action('wp_footer', function() {
+    if (!is_checkout() || is_wc_endpoint_url()) {
+        return;
+    }
+
+    $nonce = wp_create_nonce('hoopsy_checkout_qty');
+    ?>
+    <style>
+    @media (max-width: 768px) {
+      #hoopsy-mobile-order-box {
+        background: #f7f7f7;
+        border: 1px solid #e9e9e9;
+        border-radius: 16px;
+        padding: 12px;
+        margin: 0 0 14px 0;
+      }
+
+      #hoopsy-mobile-order-box #order_review_heading {
+        margin: 0 0 8px 0 !important;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      #hoopsy-mobile-order-box #order_review {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+      }
+
+      #hoopsy-mobile-order-box .shop_table {
+        margin: 0 !important;
+        background: transparent !important;
+      }
+
+      #hoopsy-mobile-order-box .product-name,
+      #hoopsy-mobile-order-box .product-total,
+      #hoopsy-mobile-order-box .cart-subtotal,
+      #hoopsy-mobile-order-box .order-total {
+        font-size: 15px;
+      }
+
+      .hoopsy-qty-desktop {
+        display: none !important;
+      }
+
+      .hoopsy-qty-mobile {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 8px;
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        padding: 4px 8px;
+        background: #fff;
+        vertical-align: middle;
+      }
+
+      .hoopsy-qty-mobile.is-loading {
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .hoopsy-qty-btn {
+        width: 26px;
+        height: 26px;
+        border: 0;
+        border-radius: 7px;
+        background: #f1f1f1;
+        color: #111;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .hoopsy-qty-value {
+        min-width: 16px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 16px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .hoopsy-qty-mobile {
+        display: none !important;
+      }
+    }
+    </style>
+
+    <script>
+    (function($){
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (!isMobile) return;
+
+      function mountMiniOrderBox() {
+        const $form = $('form.checkout');
+        const $heading = $('#order_review_heading');
+        const $review = $('#order_review');
+
+        if (!$form.length || !$heading.length || !$review.length) return;
+
+        let $box = $('#hoopsy-mobile-order-box');
+        if (!$box.length) {
+          $box = $('<div id="hoopsy-mobile-order-box"></div>');
+          $form.prepend($box);
+        }
+
+        $box.append($heading);
+        $box.append($review);
+      }
+
+      function updateQty($control, nextQty) {
+        const cartKey = $control.data('cartKey');
+        if (!cartKey) return;
+
+        $control.addClass('is-loading');
+
+        $.ajax({
+          url: wc_checkout_params.ajax_url,
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            action: 'hoopsy_update_checkout_qty',
+            nonce: '<?php echo esc_js($nonce); ?>',
+            cart_item_key: cartKey,
+            quantity: nextQty
+          }
+        }).done(function(resp){
+          if (resp && resp.success && resp.data && resp.data.qty) {
+            $control.find('.hoopsy-qty-value').text(resp.data.qty);
+            $(document.body).trigger('update_checkout');
+          }
+        }).always(function(){
+          $control.removeClass('is-loading');
+        });
+      }
+
+      $(document).on('click', '.hoopsy-qty-mobile .hoopsy-qty-btn', function(){
+        const $btn = $(this);
+        const $control = $btn.closest('.hoopsy-qty-mobile');
+        const $val = $control.find('.hoopsy-qty-value');
+
+        const current = parseInt(($val.text() || '1').trim(), 10) || 1;
+        const delta = parseInt($btn.data('delta'), 10) || 0;
+        const next = Math.max(1, current + delta);
+
+        if (next === current) return;
+        updateQty($control, next);
+      });
+
+      $(document).ready(mountMiniOrderBox);
+      $(document.body).on('updated_checkout', mountMiniOrderBox);
+    })(jQuery);
+    </script>
+    <?php
+}, 99);
