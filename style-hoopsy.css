@@ -1,0 +1,547 @@
+/* Kontener na bulletpointy w krótkim opisie */
+.benefit-container {
+    margin: 0;
+}
+
+/* Pojedynczy bullet */
+.benefit-bullet {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 13px;   /* zostaje podobny odstęp jak miałeś */
+}
+
+/* Ikona – o 1px mniejsza niż 42px */
+.benefit-icon {
+    display: block;
+    width: 45px;           /* było 42px */
+    height: 45px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+/* Tekst – o 1px mniejsza czcionka niż 17px, zero marginesów */
+.benefit-text,
+.benefit-bullet p,
+.benefit-bullet h4,
+.benefit-bullet span {
+    font-size: 15px;       /* było 17px */
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    line-height: 1.35;
+    color: #333;
+}
+
+/* Wyróżnienie */
+.benefit-text strong {
+    font-weight: 650;
+}
+
+/* RWD – można zostawić, tylko delikatne zmiany jeśli chcesz */
+@media (min-width: 768px) {
+    .benefit-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .benefit-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+
+
+/* FURGONETKA PACZKOMAT BUTTON FIXER */
+#select-point-container {
+    margin: 6px 20px 20px 20px;
+    padding: 10px;
+    border-radius: 3px;
+    background: #32b632;
+    text-align: center;
+}
+#select-point { color: white; font-weight: 700; }
+#selected-point { border-radius: 4px; font-size: 13px; }
+
+/* STYLOWANIE CENY OMNIBUS */
+.footer-fix .divider-wrap { display: none; }
+
+.iworks-omnibus {
+    font-size: 13px;          /* jak Uwielbiane przez klientki */
+    font-weight: 600;         /* jak Uwielbiane przez klientki */
+    font-family: inherit;     /* ten sam font co reszta tekstu */
+    text-transform: uppercase;
+    color: #666666;
+    margin: 2px 0 10px 0;     /* bez nachodzenia na cenę */
+    display: block;
+}
+
+
+/* HEAD STRONY PRODUKTU - drobne poprawki */
+.produkt-opinia {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+.produkt-benefity {
+    background: #f9f9f9;
+    border: 2px solid green;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+.produkt-pod-gifem { font-size: 16px; font-weight: 500; }
+.woocommerce-breadcrumb, .product_meta { display: none; }
+div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.tabs {
+    text-align: center;
+    margin: 0;
+}
+
+/* POPRAWKA GWARANCJI */
+.gwarancja-fix { display: inline-block; }
+
+/* USUNIĘCIE PODOBNYCH PRODUKTÓW */
+.single-product .products.related { display: none; }
+
+/* SUBTELNIEJSZA STYLIZACJA CENY – nadpisanie Salienta */
+
+/* Kontener ceny – reset dużego H3 z motywu */
+.single-product div.product .summary p.price.nectar-inherit-h3 {
+    font-size: 27px !important;         /* bazowy rozmiar dla całej ceny */
+    font-weight: 600;
+    font-family: inherit !important;    /* zamiast "nagłówkowego" fontu */
+    margin: 6px 0 0 0;
+    line-height: 1.2;
+    padding: 6px 0;                     /* równa odległość od linii góra/dół */
+    border-top: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+/* Stara cena – minimalnie mniejsza i delikatna */
+.single-product div.product .summary p.price.nectar-inherit-h3 del {
+    color: #f29b9b;
+    font-size: 0.8em !important;        /* odrobinę mniejsza niż baza */
+    opacity: 0.9;
+    text-decoration-thickness: 2px;
+}
+
+/* Nowa cena – trochę większa, ale już nie "olbrzymia" */
+.single-product div.product .summary p.price.nectar-inherit-h3 ins {
+    color: #1e9f3b !important;
+    font-size: 1em !important;       /* tylko ciut większa niż stara */
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Kwota w środku (amount) – przejmij rozmiar po ins/del */
+.single-product div.product .summary p.price.nectar-inherit-h3 .woocommerce-Price-amount,
+.single-product div.product .summary p.price.nectar-inherit-h3 .woocommerce-Price-amount bdi {
+    font-size: 1em !important;
+}
+
+/* Sufiks "za 1 szt." itd. – subtelny */
+.single-product div.product .summary p.price.nectar-inherit-h3 .woocommerce-price-suffix {
+    font-size: 0.8em !important;
+    color: #777777 !important;
+}
+
+
+
+
+/* POPRAWKI WIZUALNE KASY */
+.checkout #order_review .order-review tbody tr:first-child {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 20px;
+}
+.woocommerce-shipping-totals { padding-bottom: 20px; }
+.woocommerce-form-coupon-toggle { display: none; }
+.woocommerce ul#shipping_method li { margin-top: 10px; }
+.order-total {
+    padding-top: 20px;
+    border-top: 1px solid #ededed;
+}
+.woocommerce-checkout #payment ul.payment_methods { font-size: 16px; }
+.pbl-container .payu-list-banks { justify-content: left; }
+
+/* ===== POPRAWKI MOBILNE */
+@media only screen and (max-width: 1000px) {
+  .footer-fix .nectar-cta { margin-top: 20px !important; margin-bottom: 20px !important; }
+  .footer-fix .divider-wrap { display: block; }
+  .footer-fix .nectar-cta { text-align: center !important; }
+  body .container, body div.slider-nav { max-width: 90% !important; }
+  .woocommerce div.product div.summary { margin-bottom: 0; }   
+  .woocommerce-tabs[data-tab-style=fullwidth] { margin-top: 0px; }
+  .woocommerce-cart-form tbody .coupon { display: none; }
+  body[data-form-submit=regular] .woocommerce-cart-form button[type=submit] {
+      padding: 9px 15px !important;
+      color: #1e1e1e !important;
+      background-color: white !important;
+      border: 1px solid #818181;
+  }
+  .woocommerce-cart .order-total { padding-top: 0px !important; }
+  .woocommerce-shipping-totals ul#shipping_method li label { font-size: 15px; }
+}
+
+/* Poprawienie odstępów na mobile */
+@media only screen and (max-width: 770px) {
+  .woocommerce table.shop_table { margin-bottom: 0; }
+  .woocommerce table.cart td.actions { padding: 0px; }
+  .cart_totals #shipping_method { margin-top: 40px !important; text-align: left; }
+}
+
+/* Wielkość nazwy produktu w koszyku */
+.woocommerce-cart .product-name a {
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.woocommerce-shipping-totals .woocommerce-shipping-destination { display: none; }
+
+/* STYLIZACJA ELEMENTÓW W KASIE */
+.woocommerce-checkout .product-info h4 a {
+    font-size: 18px;
+    line-height: 22px;
+    display: inline-block;
+    padding-right: 30px;
+}
+
+/* Poprawka odstępu "Twoje zamówienie" */
+@media only screen and (max-width: 768px) {
+  #customer_details #order_review_heading { margin-top: 10px; }
+}
+
+/* Pomniejszenie informacji o polityce prywatności */
+.woocommerce-privacy-policy-text { font-size: 12px; }
+
+/* Zmiana koloru gwiazdek na złoty */
+.woocommerce-product-rating .star-rating span::before {
+    color: gold !important;
+    fill: gold !important;
+}
+
+.woocommerce-cart .cart_totals .includes_tax { display: none !important; }
+.woocommerce-ordering, .woocommerce-result-count { display: none !important; }
+
+.custom-product-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 3px solid #f1568d;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 15px;
+}
+.custom-product-subtitle img { height: 55px; width: auto; }
+.custom-product-subtitle span {
+    font-size: 15px;
+    font-weight: normal;
+    font-style: bold;
+    color: #000000;
+    line-height: 1.2;
+}
+@media (min-width: 768px) {
+    .custom-product-subtitle span { font-size: 19px; }
+}
+.custom-highlight {
+    color: #00a651;
+    font-weight: bold;
+}
+
+/* DropNinja RocketBundles - zmiana koloru obramowania i radio button */
+.woocommerce div.product #DropNinja_Bundles_Product .offer {
+    border: 2px solid #f1568d !important;
+}
+
+.woocommerce div.product #DropNinja_Bundles_Product .offer .radio input[type=radio],
+.woocommerce div.product #DropNinja_Bundles_Product .offer .radio input[type=checkbox] {
+    accent-color: #f1568d !important;
+}
+
+/* ===================== UPSell ≈ RocketBundle (scalone) ===================== */
+
+/* tabela jako blok, żeby flex na tr działał przewidywalnie */
+table.wcqcs-cross-sells,
+table.wcqcs-cross-sells tbody {
+  display: block !important;
+  border: 0 !important;
+  background: none !important;
+  width: 100%;
+}
+table.wcqcs-cross-sells td {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* KARTA UPSELLA */
+tr.wcqcs-cross-sell-item{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:16px 18px !important;
+  border:2px solid #cfcfcf !important;
+  border-radius:6px !important;            
+  background:#fff !important;
+  margin-bottom:-20px !important;
+  transition:border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+tr.wcqcs-cross-sell-item:hover{
+  border-color:#f1568d !important;
+}
+tr.wcqcs-cross-sell-item.checked{
+  border-color:#f1568d !important;          /* ramka aktywnej opcji */
+  background:#fff !important;
+}
+
+/* MINIATURA – wyłączone, żeby nie rozpychało wiersza */
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-image{ display:none !important; }
+
+/* KÓŁKO WYBORU (checkbox/radio) – różowe */
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb{
+  flex:0 0 auto !important;
+  margin:0 12px 0 2px !important;          
+}
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"],
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]{
+  appearance:none; -webkit-appearance:none;
+  width:20px; height:20px;                 
+  border:2px solid #bfbfbf;
+  border-radius:50%;
+  background:#fff;
+  display:grid; place-content:center;
+  margin:0; cursor:pointer;
+  transition:border-color .15s ease;
+}
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:hover,
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:hover{
+  border-color:#f1568d !important;
+}
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]::before,
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]::before{
+  content:"";
+  width:10px; height:10px;                 
+  border-radius:50%;
+  background:transparent;
+  transition:background-color .15s ease, transform .15s ease;
+  transform:scale(0.95);
+}
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:checked,
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:checked{
+  border-color:#f1568d !important;
+}
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:checked::before,
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:checked::before{
+  background:#f1568d !important;                        
+}
+
+/* BLOK TEKST + CENA – jedna linia */
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-product{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  flex-direction:row !important;
+}
+
+/* NAZWA – może się zawijać, nie spycha ceny w dół */
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-name{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+  font-size:16px !important;
+  font-weight:550 !important;
+  color:#111827 !important;
+  line-height:1.25 !important;
+  word-break:break-word;
+}
+
+/* CENA – większa, po prawej, bez łamania */
+tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-price{
+  flex:0 0 auto !important;
+  margin-left:auto !important;
+  white-space:nowrap !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  font-size:22px !important;               
+  font-weight:500 !important;
+  color:#189721 !important;
+}
+
+/* Wyłączanie klików w linki (nazwa/miniatura) */
+tr.wcqcs-cross-sell-item a,
+.wcqcs-cross-sell-item-image a,
+.wcqcs-cross-sell-item-name a{
+  pointer-events:none !important;
+  text-decoration:none !important;
+  color:inherit !important;
+  cursor:default !important;
+}
+
+/* Mobile – trzymaj strukturę w jednej linii */
+@media (max-width:700px){
+  tr.wcqcs-cross-sell-item{ flex-direction:row !important; }
+  tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-product{ flex-wrap:nowrap !important; }
+}
+
+/* 2. Ukrycie tytułu "Spodoba Ci się także" */
+h2.wcqcs-cross-sells-title,
+.upsells.products > h2 {
+  display: none !important;
+}
+
+/* 3. Ukrycie ikonki/linka po "Rozszerzenie koła do 145 cm" */
+.wcqcs-cross-sell-item-name a::after,
+.wcqcs-cross-sell-item-name a svg,
+.wcqcs-cross-sell-item-name a .dashicons,
+.wcqcs-cross-sell-item-name a .icon {
+  display: none !important;
+}
+
+/* =================== /UPSell ≈ RocketBundle (scalone) =================== */
+
+/* 💳 Pulsujące CTA tylko w kasie (checkout) */
+#place_order {
+    animation: pulse 2s ease infinite;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(233, 16, 143, 0.8); }
+    100% { box-shadow: 0 0 0 20px rgba(233, 16, 143, 0); }
+}
+
+/* Lżejszy font dla wszystkich metod dostawy */
+#shipping_method li label,
+.woocommerce-shipping-methods label {
+  font-weight: 600 !important;
+  font-size: 15px !important;
+}
+
+/* Zawsze zielony i pogrubiony Paczkomat InPost */
+#shipping_method_0_flexible_shipping_single1 + label {
+  color: #32b632 !important;
+}
+
+/* Checkout: ukryj lewą kolumnę "Wysyłka" i poszerz metody */
+.woocommerce-checkout-review-order-table .woocommerce-shipping-totals th {
+  display: none !important;
+}
+
+.woocommerce-checkout-review-order-table .woocommerce-shipping-totals td {
+  display: block !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+}
+
+/* Na motywach, które doklejają label z data-title (widok mobilny) */
+.woocommerce-checkout-review-order-table .woocommerce-shipping-totals td::before {
+  content: none !important;
+}
+
+/* Daj listę metod na pełną szerokość, bez wcięć */
+.woocommerce-checkout-review-order-table #shipping_method,
+.woocommerce-checkout-review-order-table .woocommerce-shipping-methods {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* 💳 Delikatne pulsowanie CTA na stronie produktu (jak w Twoim kodzie, tylko subtelniej) */
+@keyframes pulse-soft {
+  0%   { box-shadow: 0 0 0 0 rgba(233, 16, 143, 0.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(233, 16, 143, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(233, 16, 143, 0); }
+}
+
+.single-product .single_add_to_cart_button {
+  animation: pulse-soft 2s ease-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===================== CUSTOM RATING HooPsy ===================== */
+
+/* Ukryj stary blok WooCommerce */
+.woocommerce-product-rating {
+    display: none !important;
+}
+
+/* Kontener – tylko pozycjonowanie w pionie */
+.hoopsy-rating-wrap {
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+/* Klikalny panel: gwiazdki + "4,9/5 (18) – Uwielbiane przez klientki." */
+.hoopsy-rating-panel {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;                 /* bliżej gwiazdek do tekstu */
+    text-decoration: none;
+    font-size: 13px;          /* jak .hoopsy-metody-wysylki */
+    font-weight: 600;         /* jak .hoopsy-metody-wysylki */
+    color: #444;              /* jak .hoopsy-metody-wysylki */
+    cursor: pointer;
+}
+
+/* gwiazdki – tylko zmniejszamy font, NIE ruszamy szerokości */
+.hoopsy-rating-panel .star-rating {
+    font-size: 12px;          /* mniejsze gwiazki */
+    line-height: 1;
+    margin: 0;
+}
+
+/* tekst: "4,9/5 (18) – Uwielbiane przez klientki." */
+.hoopsy-rating-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    white-space: nowrap;      /* staramy się trzymać w jednej linii */
+}
+
+/* sama wartość "4,9/5" lekko mocniejsza */
+.hoopsy-rating-value {
+    font-weight: 700;
+}
+
+/* złote gwiazdki */
+.hoopsy-rating-panel .star-rating span::before,
+.woocommerce-product-rating .star-rating span::before {
+    color: gold !important;
+    fill: gold !important;
+}
+
+/* na bardzo wąskich ekranach pozwól tekstowi się złamać, żeby nie uciekał */
+@media (max-width: 420px) {
+    .hoopsy-rating-text {
+        white-space: normal;
+    }
+}
+
+/* Cienka linia nad nazwą produktu – jak przy cenie */
+.single-product div.product .summary .product_title {
+    margin-top: 8px;              /* odstęp od paska wysyłki/metod */
+    padding-top: 9px;             /* odstęp między linią a tekstem tytułu */
+    border-top: 1px solid #e4e4e4; /* ta sama linia co przy cenie */
+}
+
+/* Ukryj ikonę lupy (zoom) w galerii na stronie produktu */
+.single-product .woocommerce-product-gallery__trigger{
+  display:none !important;
+}
