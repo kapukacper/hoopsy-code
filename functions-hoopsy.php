@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 /**
  * =========================================================
  * HOOPSY / STYLE DZIECKA - PEŁNY KOD DO functions.php
- * Jedna logika wysyłki:
+ * Jedna logika wysyłki:a
  * - do 18:30 -> Dziś
  * - po 18:30 -> Jutro
  * =========================================================
@@ -513,6 +513,58 @@ function pasek_zaufania_perfect_salient() {
           <span class="pasek-zaufania-text">Ochrona danych i prywatności</span>
         </div>
       </div>
+    </div>';
+}
+
+// ❓ FAQ Accordion for specific products
+add_action('woocommerce_after_single_product_summary', 'hoopsy_faq_accordion', 5);
+function hoopsy_faq_accordion() {
+    global $product;
+    if (!$product instanceof WC_Product) return;
+
+    // Array of product IDs that should show FAQ
+    $faq_product_ids = [15220];
+    
+    $pid = (int) $product->get_id();
+    if (!in_array($pid, $faq_product_ids, true)) return;
+
+    echo '<div class="hoopsy-faq-section">
+        <h3 class="hoopsy-faq-header">Najczęściej zadawane pytania o Hoopsy™</h3>
+        
+        <details class="hoopsy-faq-item">
+            <summary class="hoopsy-faq-question">Pytanie 1</summary>
+            <div class="hoopsy-faq-answer">
+                <p>Odpowiedź 1</p>
+            </div>
+        </details>
+
+        <details class="hoopsy-faq-item">
+            <summary class="hoopsy-faq-question">Pytanie 2</summary>
+            <div class="hoopsy-faq-answer">
+                <p>Odpowiedź 2</p>
+            </div>
+        </details>
+
+        <details class="hoopsy-faq-item">
+            <summary class="hoopsy-faq-question">Pytanie 3</summary>
+            <div class="hoopsy-faq-answer">
+                <p>Odpowiedź 3</p>
+            </div>
+        </details>
+
+        <details class="hoopsy-faq-item">
+            <summary class="hoopsy-faq-question">Pytanie 4</summary>
+            <div class="hoopsy-faq-answer">
+                <p>Odpowiedź 4</p>
+            </div>
+        </details>
+
+        <details class="hoopsy-faq-item">
+            <summary class="hoopsy-faq-question">Pytanie 5</summary>
+            <div class="hoopsy-faq-answer">
+                <p>Odpowiedź 5</p>
+            </div>
+        </details>
     </div>';
 }
 
@@ -1081,205 +1133,3 @@ add_action('wp_head', function() {
     </style>
     <?php
 });
-
-/* =========================================================
- * 7) CHECKOUT MOBILE - MINI KOSZYK NA GÓRZE + +/- ILOŚĆ
- * =======================================================*/
-
-add_filter('woocommerce_checkout_cart_item_quantity', function($quantity_html, $cart_item, $cart_item_key) {
-    if (!is_checkout()) {
-        return $quantity_html;
-    }
-
-    $qty = max(1, (int) $cart_item['quantity']);
-    $key = esc_attr($cart_item_key);
-
-    return '<span class="hoopsy-qty-desktop">&times;&nbsp;' . $qty . '</span>'
-        . '<span class="hoopsy-qty-mobile" data-cart-key="' . $key . '">' 
-        . '<button type="button" class="hoopsy-qty-btn" data-delta="-1" aria-label="Zmniejsz ilość">-</button>'
-        . '<span class="hoopsy-qty-value">' . $qty . '</span>'
-        . '<button type="button" class="hoopsy-qty-btn" data-delta="1" aria-label="Zwiększ ilość">+</button>'
-        . '</span>';
-}, 20, 3);
-
-add_action('wp_ajax_hoopsy_update_checkout_qty', 'hoopsy_update_checkout_qty');
-add_action('wp_ajax_nopriv_hoopsy_update_checkout_qty', 'hoopsy_update_checkout_qty');
-function hoopsy_update_checkout_qty() {
-    check_ajax_referer('hoopsy_checkout_qty', 'nonce');
-
-    if (!WC()->cart) {
-        wp_send_json_error(['message' => 'Brak koszyka.'], 400);
-    }
-
-    $key = isset($_POST['cart_item_key']) ? wc_clean(wp_unslash($_POST['cart_item_key'])) : '';
-    $qty = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 1;
-    $qty = max(1, $qty);
-
-    $cart = WC()->cart->get_cart();
-    if (!$key || !isset($cart[$key])) {
-        wp_send_json_error(['message' => 'Nie znaleziono produktu w koszyku.'], 404);
-    }
-
-    WC()->cart->set_quantity($key, $qty, true);
-    WC()->cart->calculate_totals();
-
-    wp_send_json_success(['qty' => $qty]);
-}
-
-add_action('wp_footer', function() {
-    if (!is_checkout() || is_wc_endpoint_url()) {
-        return;
-    }
-
-    $nonce = wp_create_nonce('hoopsy_checkout_qty');
-    ?>
-    <style>
-    @media (max-width: 768px) {
-      #hoopsy-mobile-order-box {
-        background: #f7f7f7;
-        border: 1px solid #e9e9e9;
-        border-radius: 16px;
-        padding: 12px;
-        margin: 0 0 14px 0;
-      }
-
-      #hoopsy-mobile-order-box #order_review_heading {
-        margin: 0 0 8px 0 !important;
-        font-size: 18px;
-        line-height: 1.2;
-      }
-
-      #hoopsy-mobile-order-box #order_review {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        border: 0 !important;
-      }
-
-      #hoopsy-mobile-order-box .shop_table {
-        margin: 0 !important;
-        background: transparent !important;
-      }
-
-      #hoopsy-mobile-order-box .product-name,
-      #hoopsy-mobile-order-box .product-total,
-      #hoopsy-mobile-order-box .cart-subtotal,
-      #hoopsy-mobile-order-box .order-total {
-        font-size: 15px;
-      }
-
-      .hoopsy-qty-desktop {
-        display: none !important;
-      }
-
-      .hoopsy-qty-mobile {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        margin-left: 8px;
-        border: 1px solid #d9d9d9;
-        border-radius: 10px;
-        padding: 4px 8px;
-        background: #fff;
-        vertical-align: middle;
-      }
-
-      .hoopsy-qty-mobile.is-loading {
-        opacity: 0.55;
-        pointer-events: none;
-      }
-
-      .hoopsy-qty-btn {
-        width: 26px;
-        height: 26px;
-        border: 0;
-        border-radius: 7px;
-        background: #f1f1f1;
-        color: #111;
-        font-size: 18px;
-        line-height: 1;
-        cursor: pointer;
-      }
-
-      .hoopsy-qty-value {
-        min-width: 16px;
-        text-align: center;
-        font-weight: 700;
-        font-size: 16px;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .hoopsy-qty-mobile {
-        display: none !important;
-      }
-    }
-    </style>
-
-    <script>
-    (function($){
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (!isMobile) return;
-
-      function mountMiniOrderBox() {
-        const $form = $('form.checkout');
-        const $heading = $('#order_review_heading');
-        const $review = $('#order_review');
-
-        if (!$form.length || !$heading.length || !$review.length) return;
-
-        let $box = $('#hoopsy-mobile-order-box');
-        if (!$box.length) {
-          $box = $('<div id="hoopsy-mobile-order-box"></div>');
-          $form.prepend($box);
-        }
-
-        $box.append($heading);
-        $box.append($review);
-      }
-
-      function updateQty($control, nextQty) {
-        const cartKey = $control.data('cartKey');
-        if (!cartKey) return;
-
-        $control.addClass('is-loading');
-
-        $.ajax({
-          url: wc_checkout_params.ajax_url,
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            action: 'hoopsy_update_checkout_qty',
-            nonce: '<?php echo esc_js($nonce); ?>',
-            cart_item_key: cartKey,
-            quantity: nextQty
-          }
-        }).done(function(resp){
-          if (resp && resp.success && resp.data && resp.data.qty) {
-            $control.find('.hoopsy-qty-value').text(resp.data.qty);
-            $(document.body).trigger('update_checkout');
-          }
-        }).always(function(){
-          $control.removeClass('is-loading');
-        });
-      }
-
-      $(document).on('click', '.hoopsy-qty-mobile .hoopsy-qty-btn', function(){
-        const $btn = $(this);
-        const $control = $btn.closest('.hoopsy-qty-mobile');
-        const $val = $control.find('.hoopsy-qty-value');
-
-        const current = parseInt(($val.text() || '1').trim(), 10) || 1;
-        const delta = parseInt($btn.data('delta'), 10) || 0;
-        const next = Math.max(1, current + delta);
-
-        if (next === current) return;
-        updateQty($control, next);
-      });
-
-      $(document).ready(mountMiniOrderBox);
-      $(document.body).on('updated_checkout', mountMiniOrderBox);
-    })(jQuery);
-    </script>
-    <?php
-}, 99);
