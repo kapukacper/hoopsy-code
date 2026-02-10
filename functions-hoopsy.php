@@ -526,7 +526,7 @@ function hoopsy_faq_accordion() {
     $pid = (int) $product->get_id();
     if (!in_array($pid, $faq_product_ids, true)) return;
 
-    $q = 'background:#f7f7f7;border:none;border-radius:8px;margin:0 0 9px 0;overflow:hidden;';
+    $q = 'background:#fff5f8 !important;border:none;border-radius:12px;margin:0 0 9px 0;overflow:hidden;box-shadow:none;';
     $s = 'cursor:pointer;padding:7px 30px 7px 12px;font-size:13px;font-weight:500;color:#555;list-style:none;position:relative;';
     $a = 'padding:0 12px 8px 12px;font-size:13px;line-height:1.5;color:#777;';
     $dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1ec13a;margin-right:6px;flex-shrink:0;vertical-align:middle;"></span>';
