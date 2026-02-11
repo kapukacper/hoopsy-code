@@ -504,7 +504,7 @@ function pasek_zaufania_perfect_salient() {
           <span class="pasek-zaufania-icon">
             <img src="https://www.hoopsy.pl/wp-content/uploads/2025/11/success_4192775.svg" alt="Zweryfikowany sprzedawca" style="display:block; width:23px; height:23px;">
           </span>
-          <span class="pasek-zaufania-text">Zweryfikowany sprzedawca</span>
+          <span class="pasek-zaufania-text">Polska firma<br>NIP &amp; REGON</span>
         </div>
         <div class="pasek-zaufania-item">
           <span class="pasek-zaufania-icon">
@@ -526,28 +526,28 @@ function hoopsy_faq_accordion() {
     $pid = (int) $product->get_id();
     if (!in_array($pid, $faq_product_ids, true)) return;
 
-    $q = 'background:#fff5f8 !important;border:none;border-radius:12px;margin:0 0 9px 0;overflow:hidden;box-shadow:none;';
+    $q = 'background:#fff !important;border:none;border-radius:12px;margin:0 0 9px 0;overflow:hidden;box-shadow:none;';
     $s = 'cursor:pointer;padding:7px 30px 7px 12px;font-size:13px;font-weight:500;color:#555;list-style:none;position:relative;';
     $a = 'padding:0 12px 8px 12px;font-size:13px;line-height:1.5;color:#777;';
     $dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1ec13a;margin-right:6px;flex-shrink:0;vertical-align:middle;"></span>';
     $arrow = '<span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.6em;color:#f84077;">▼</span>';
 
-    echo '<div style="margin:-11px 0 0 0;width:100%;background:#fff;border:1px solid #f5f5f5;border-radius:12px;padding:10px;box-sizing:border-box;">
+    echo '<div style="margin:-1px 0 0 0;width:100%;background:#f84077;border:none;border-radius:12px;padding:10px;box-sizing:border-box;">
         <style>
             .hoopsy-faq-item summary::-webkit-details-marker{display:none;}
             .hoopsy-faq-item summary::marker{display:none;content:"";}
             @media(max-width:480px){
-                .hoopsy-faq-title{font-size:min(13px, 3.5vw) !important;}
+                .hoopsy-faq-title{font-size:min(15px, 3.8vw) !important;}
             }
             @media(min-width:999px){
                 .hoopsy-faq-title{font-size:16px !important;font-weight:600 !important;padding-bottom:14px !important;}
             }
         </style>
-        <div class="hoopsy-faq-title" style="padding:2px 4px 10px 4px;font-size:16px;font-weight:600;color:#555;line-height:1.3;white-space:nowrap;text-align:center;">Najczęściej zadawane pytania o Hoopsy™</div>
+        <div class="hoopsy-faq-title" style="padding:2px 4px 10px 4px;font-size:16px;font-weight:600;color:#fff;line-height:1.3;white-space:nowrap;text-align:center;">Najczęściej zadawane pytania o Hoopsy™</div>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Jaki jest rozmiar? Zmieszczę się w pasie?' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Pasuje do 130 cm w pasie</strong> - jeśli potrzebujesz więcej to napisz do nas, dołożymy dodatkowe elementy.<br><br>Rozmiar regulujesz do swojej talii dodając lub odejmując elementy koła.</div></details>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Czy łatwo się je zakłada i zdejmuje?' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Tak! Łączysz i odpinasz elementy w sekundę.</strong> Zakładasz, naciskasz segment i gotowe – bez użycia siły.</div></details>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Dam radę? Nigdy wcześniej nie kręciłam.' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Tak! Ciężarek sunie gładko po szynie</strong> – wystarczy nadać mu pęd. Uda się każdemu maksymalnie po kilku próbach.</div></details>
-        <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Czy hałasuje? Miałam innej firmy – głośne' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Nie. Hoopsy™ ma metalowe łożyska, więc jest cichsze.</strong> Słychać tylko szum – spokojnie obejrzysz przy nim serial, nie będziesz przeszkadzać sobie lub innym.</div></details>
+        <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Czy hałasuje? Innych firm są głośne.' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Nie. Hoopsy™ ma metalowe łożyska, więc jest cichsze.</strong> Słychać tylko szum – spokojnie obejrzysz przy nim serial, nie będziesz przeszkadzać sobie lub innym.</div></details>
         <details class="hoopsy-faq-item" style="' . $q . 'margin-bottom:0;"><summary style="' . $s . '">Kiedy zobaczę pierwsze efekty?' . $arrow . '</summary><div style="' . $a . '">' . $dot . 'Większość naszych klientek czuje pierwszy „luz" w spodniach już po <strong>14 dniach</strong> regularnego kręcenia (min. 15-20 minut dziennie). Wyraźne wysmuklenie talii i ujędrnienie zazwyczaj pojawiają się po pełnym, <strong>30-dniowym cyklu z naszym Planem Ćwiczeń</strong>.</div></details>
     </div>';
 }
