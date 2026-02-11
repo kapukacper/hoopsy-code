@@ -540,11 +540,10 @@ function hoopsy_faq_accordion() {
                 .hoopsy-faq-title{font-size:min(13px, 3.5vw) !important;}
             }
             @media(min-width:999px){
-                .hoopsy-faq-title{font-size:15px !important;font-weight:500 !important;padding-bottom:14px !important;}
-                .hoopsy-faq-title img{height:27px !important;}
+                .hoopsy-faq-title{font-size:16px !important;font-weight:600 !important;padding-bottom:14px !important;}
             }
         </style>
-        <div class="hoopsy-faq-title" style="display:flex;align-items:center;padding:2px 4px 10px 4px;font-size:15px;font-weight:500;color:#555;line-height:1.3;white-space:nowrap;"><img src="https://www.hoopsy.pl/wp-content/uploads/2026/02/question_7611834.png" alt="" style="height:23px;width:auto;margin-right:10px;flex-shrink:0;"><span style="width:1px;height:24px;background:#ddd;display:block;margin-right:10px;flex-shrink:0;"></span>Najczęściej zadawane pytania o Hoopsy™</div>
+        <div class="hoopsy-faq-title" style="padding:2px 4px 10px 4px;font-size:16px;font-weight:600;color:#555;line-height:1.3;white-space:nowrap;text-align:center;">Najczęściej zadawane pytania o Hoopsy™</div>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Jaki jest rozmiar? Zmieszczę się w pasie?' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Pasuje do 130 cm w pasie</strong> - jeśli potrzebujesz więcej to napisz do nas, dołożymy dodatkowe elementy.<br><br>Rozmiar regulujesz do swojej talii dodając lub odejmując elementy koła.</div></details>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Czy łatwo się je zakłada i zdejmuje?' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Tak! Łączysz i odpinasz elementy w sekundę.</strong> Zakładasz, naciskasz segment i gotowe – bez użycia siły.</div></details>
         <details class="hoopsy-faq-item" style="' . $q . '"><summary style="' . $s . '">Dam radę? Nigdy wcześniej nie kręciłam.' . $arrow . '</summary><div style="' . $a . '">' . $dot . '<strong>Tak! Ciężarek sunie gładko po szynie</strong> – wystarczy nadać mu pęd. Uda się każdemu maksymalnie po kilku próbach.</div></details>
