@@ -325,7 +325,9 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
 }
 
 .pbl-container .payu-list-banks {
-  justify-content: left;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+  gap: 8px !important;
 }
 
 /* ===== POPRAWKI MOBILNE */
@@ -628,31 +630,48 @@ h2.wcqcs-cross-sells-title,
   display: none !important;
 }
 
-/* 💳 CTA */
+/* 💳 CTA – różowy przycisk kasy */
 #place_order {
-  animation: pulse 2s ease infinite;
+  animation: pulse-pink 2s ease infinite;
   position: relative;
   z-index: 1;
+  background: #f84077 !important;
+  color: #ffffff !important;
+  border: none !important;
+  width: calc(100% - 20px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+  font-size: 20px !important;
+  margin-bottom: 17px !important;
 }
 
-@keyframes pulse {
+@keyframes pulse-pink {
   0% {
-    box-shadow: 0 0 0 0 rgba(233, 16, 143, 0.8);
+    box-shadow: 0 0 0 0 rgba(248, 64, 119, 0.6);
   }
 
   100% {
-    box-shadow: 0 0 0 20px rgba(233, 16, 143, 0);
+    box-shadow: 0 0 0 20px rgba(248, 64, 119, 0);
   }
 }
 
 #shipping_method li label,
 .woocommerce-shipping-methods label {
   font-weight: 600 !important;
-  font-size: 15px !important;
+  font-size: 13px !important;
+  white-space: normal !important;
 }
 
 #shipping_method_0_flexible_shipping_single1+label {
   color: #32b632 !important;
+}
+/* InPost Kurier – szary kolor tekstu */
+#shipping_method_0_flexible_shipping_single2+label,
+#shipping_method_0_flexible_shipping_single3+label {
+  color: #555 !important;
 }
 
 .woocommerce-checkout-review-order-table .woocommerce-shipping-totals th {
@@ -844,5 +863,601 @@ h2.wcqcs-cross-sells-title,
 
   .hoopsy-faq-answer {
     font-size: 11px;
+  }
+}
+
+/* ===================== HOOPSY CHECKOUT - ELEMENT 1: DANE ROZLICZENIOWE ===================== */
+
+/* Box container */
+.woocommerce-billing-fields {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  margin-bottom: 24px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  transition: all 0.3s ease;
+  overflow: hidden !important;
+}
+
+.woocommerce-billing-fields:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16) !important;
+  border-color: #d0d0d0 !important;
+}
+
+/* Nagłówek - różowy gradient */
+.woocommerce-billing-fields h3 {
+  background: linear-gradient(135deg, #f84077 0%, #d63568 100%) !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  margin: 0 !important;
+  padding: 14px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Wrapper dla pól */
+.woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper {
+  padding: 10px 20px 15px 20px !important;
+}
+
+/* Etykiety pól formularza */
+.woocommerce-billing-fields .form-row label {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #555 !important;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+/* Pełna szerokość dla .form-row */
+.woocommerce-billing-fields .form-row {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  float: none !important;
+  margin-bottom: 16px;
+}
+
+/* Asterisk */
+.woocommerce-billing-fields .form-row label .required {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-left: 2px;
+}
+
+/* Wszystkie pola input, select, textarea */
+.woocommerce-billing-fields .form-row input[type="text"],
+.woocommerce-billing-fields .form-row input[type="email"],
+.woocommerce-billing-fields .form-row input[type="tel"],
+.woocommerce-billing-fields .form-row select,
+.woocommerce-billing-fields .form-row textarea {
+  width: 100% !important;
+  padding: 8px 12px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.3;
+  color: #333;
+  background: #fafafa;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Placeholder styling */
+.woocommerce-billing-fields .form-row input::placeholder,
+.woocommerce-billing-fields .form-row textarea::placeholder {
+  color: #999;
+  font-style: italic;
+  opacity: 1;
+}
+
+/* Focus state - różowy akcent */
+.woocommerce-billing-fields .form-row input:focus,
+.woocommerce-billing-fields .form-row select:focus,
+.woocommerce-billing-fields .form-row textarea:focus {
+  border-color: #f84077;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(248, 64, 119, 0.1);
+  outline: none;
+}
+
+/* Hover state */
+.woocommerce-billing-fields .form-row input:hover,
+.woocommerce-billing-fields .form-row select:hover,
+.woocommerce-billing-fields .form-row textarea:hover {
+  border-color: #bbb;
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+  .woocommerce-billing-fields {
+    padding: 20px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .woocommerce-billing-fields h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .woocommerce-billing-fields .form-row input[type="text"],
+  .woocommerce-billing-fields .form-row input[type="email"],
+  .woocommerce-billing-fields .form-row input[type="tel"],
+  .woocommerce-billing-fields .form-row select,
+  .woocommerce-billing-fields .form-row textarea {
+    padding: 9px 12px;
+    font-size: 16px;
+    line-height: 1.3;
+    min-height: 44px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .woocommerce-billing-fields .form-row select {
+    min-height: 52px;
+    background-position: right 12px center;
+  }
+}
+
+/* Error state */
+.woocommerce-billing-fields .form-row.woocommerce-invalid input,
+.woocommerce-billing-fields .form-row.woocommerce-invalid select {
+  border-color: #e74c3c !important;
+  background-color: #fff5f5;
+}
+
+.woocommerce-billing-fields .form-row.woocommerce-invalid label {
+  color: #e74c3c;
+}
+
+/* Success state */
+.woocommerce-billing-fields .form-row.woocommerce-validated input,
+.woocommerce-billing-fields .form-row.woocommerce-validated select {
+  border-color: #27ae60;
+  background-color: #f0fff4;
+}
+
+/* ===================== HOOPSY CHECKOUT - RADIO BUTTONS ===================== */
+.woocommerce ul#shipping_method li input[type="radio"],
+.woocommerce-checkout #payment ul.payment_methods li input[type="radio"] {
+  vertical-align: middle !important;
+  margin-top: -1px !important;
+}
+.woocommerce ul#shipping_method li label,
+.woocommerce-checkout #payment ul.payment_methods li label {
+  vertical-align: middle !important;
+}
+
+/* Ukryj wiersz "Kwota" */
+.hoopsy-box-table .cart-subtotal {
+  display: none !important;
+}
+/* Łącznie – linia nad, równe odstępy */
+.hoopsy-box-table tr.order-total {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  border-top: 2px solid #e0e0e0 !important;
+  margin: 1px 20px 0 20px !important;
+  padding: 14px 0 !important;
+}
+.hoopsy-box-table tr.order-total th,
+.hoopsy-box-table tr.order-total td {
+  padding: 0 !important;
+}
+.hoopsy-box-table tr.order-total th {
+  font-size: 14px !important;
+}
+.hoopsy-box-table tr.order-total td,
+.hoopsy-box-table tr.order-total td strong,
+.hoopsy-box-table tr.order-total td .woocommerce-Price-amount {
+  font-size: 14px !important;
+}
+.hoopsy-box-table tr.order-total .includes_tax {
+  font-size: 11px !important;
+}
+.hoopsy-box-table > tbody {
+  padding-bottom: 0 !important;
+}
+/* Zmniejsz padding pod dostawami */
+table.hoopsy-box-table tr.woocommerce-shipping-totals td {
+  padding-bottom: 0 !important;
+}
+/* Trzecia dostawa – mniejszy font na mobile */
+@media (max-width: 768px) {
+  #shipping_method_0_flexible_shipping_single3 + label {
+    font-size: 11px !important;
+  }
+}
+
+.woocommerce-checkout #payment ul.payment_methods {
+  font-size: 13px;
+  margin-top: 6px !important;
+  color: #555 !important;
+}
+.woocommerce-checkout #payment ul.payment_methods label {
+  color: #555 !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+/* ===================== HOOPSY CHECKOUT BOXY: PRODUKTY + DOSTAWA ===================== */
+
+/* Ukryj domyślny nagłówek "Twoje zamówienie" */
+h3#order_review_heading {
+  display: none !important;
+}
+/* Desktop: wyrównaj górne krawędzie kolumn */
+@media (min-width: 769px) {
+  #customer_details {
+    display: flex !important;
+    gap: 24px !important;
+  }
+  #customer_details .col-1 {
+    padding-top: 32px !important;
+    flex: 1 !important;
+    float: none !important;
+  }
+  #customer_details .col-2 {
+    flex: 1 !important;
+    float: none !important;
+  }
+}
+
+/* Wspólny nagłówek boxów – różowy gradient */
+.hoopsy-box-header {
+  background: linear-gradient(135deg, #f84077 0%, #d63568 100%) !important;
+  color: #ffffff !important;
+  padding: 14px 20px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  text-align: left !important;
+  margin: 0 0 -2px 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  border: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+/* === BOX 1: TWOJE PRODUKTY === */
+.hoopsy-products-box {
+  margin-bottom: 24px !important;
+}
+
+.hoopsy-box-table {
+  background: #ffffff !important;
+  border: 2px solid #e0e0e0 !important;
+  border-top: none !important;
+  border-radius: 0 0 16px 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  display: table !important;
+}
+
+.hoopsy-box-table td,
+.hoopsy-box-table th {
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  border: none !important;
+}
+
+/* === BOX 2: DOSTAWA I PODSUMOWANIE === */
+.hoopsy-delivery-header-el {
+  margin-top: 0 !important;
+}
+@media (max-width: 768px) {
+  .hoopsy-delivery-header-el {
+    margin-top: -50px !important;
+  }
+}
+
+/* Tabela i tfoot/tbody jako block */
+.hoopsy-box-table,
+.hoopsy-box-table tfoot,
+.hoopsy-box-table tbody {
+  display: block !important;
+  width: 100% !important;
+}
+
+table.hoopsy-box-table tr.woocommerce-shipping-totals {
+  display: block !important;
+  width: 100% !important;
+}
+
+table.hoopsy-box-table tr.woocommerce-shipping-totals th {
+  display: none !important;
+}
+
+table.hoopsy-box-table tr.woocommerce-shipping-totals td {
+  display: block !important;
+  width: 100% !important;
+  padding: 10px 20px 2px 20px !important;
+  box-sizing: border-box !important;
+}
+
+table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  list-style: none !important;
+}
+
+.woocommerce-checkout-review-order-table {
+  background: #ffffff !important;
+  border: 2px solid #e0e0e0 !important;
+  border-top: none !important;
+  border-radius: 0 0 16px 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  margin-bottom: 24px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+  display: table !important;
+  margin-top: 0 !important;
+}
+
+/* Ukryj thead */
+.woocommerce-checkout-review-order-table thead {
+  display: none !important;
+}
+
+/* Ukryj caption */
+.woocommerce-checkout-review-order-table caption {
+  display: none !important;
+}
+
+/* Padding w tabelach */
+.woocommerce-checkout-review-order-table th,
+.woocommerce-checkout-review-order-table td {
+  padding: 15px 20px !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+}
+
+/* Linie podziału */
+.woocommerce-checkout-review-order-table tfoot tr+tr th,
+.woocommerce-checkout-review-order-table tfoot tr+tr td {
+  border-top: 1px solid #f0f0f0 !important;
+}
+
+/* Pierwszy wiersz tfoot */
+.woocommerce-checkout-review-order-table tfoot tr:first-child th,
+.woocommerce-checkout-review-order-table tfoot tr:first-child td {
+  padding-top: 20px !important;
+}
+
+/* Ostatni wiersz */
+.woocommerce-checkout-review-order-table tfoot tr:last-child th,
+.woocommerce-checkout-review-order-table tfoot tr:last-child td {
+  padding-bottom: 25px !important;
+  border-bottom: none !important;
+}
+
+/* === BOX 3: METODA PŁATNOŚCI === */
+.hoopsy-payment-header {
+  margin-top: 0 !important;
+}
+
+#payment {
+  background: #ffffff !important;
+  border: 2px solid #e0e0e0 !important;
+  border-top: none !important;
+  border-radius: 0 0 16px 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  margin-bottom: 24px !important;
+  padding: 20px 20px 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* ===================== NUMERKI KROKÓW W NAGŁÓWKACH ===================== */
+@media (max-width: 768px) {
+  .hoopsy-box-header {
+    font-size: 15px !important;
+  }
+}
+.hoopsy-step-num {
+  display: none;
+}
+@media (max-width: 768px) {
+  .hoopsy-step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #f84077;
+    font-size: 14px;
+    font-weight: 800;
+    margin-right: 10px;
+    line-height: 1;
+    text-indent: 0;
+    padding: 0;
+    box-sizing: content-box;
+  }
+}
+
+/* Nazwa produktu w koszyku */
+.woocommerce-checkout .product-info h4,
+.woocommerce-checkout .product-info h4 a {
+  font-size: 13px !important;
+  line-height: 18px !important;
+  font-weight: 600 !important;
+  color: #555 !important;
+}
+.woocommerce-checkout .product-info a,
+.woocommerce-checkout .product-info a:hover {
+  text-decoration: none !important;
+  background-image: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+.woocommerce-checkout .product-info a::after,
+.woocommerce-checkout .product-info a::before {
+  display: none !important;
+}
+
+/* ===================== STARA CENA W CHECKOUT ===================== */
+.hoopsy-prices-wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  flex-shrink: 0 !important;
+}
+.hoopsy-old-price {
+  display: block !important;
+  color: #999 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  text-decoration: line-through !important;
+  text-decoration-color: #e74c3c !important;
+  text-decoration-thickness: 1px !important;
+  margin-top: -5px !important;
+}
+.hoopsy-old-price .woocommerce-Price-amount {
+  color: #999 !important;
+}
+
+/* ===================== PLUS/MINUS ILOŚĆ W CHECKOUT ===================== */
+.hoopsy-qty-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  background: #f5f5f5;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+  margin-top: 3px;
+}
+.hoopsy-qty-btn {
+  width: 24px;
+  height: 24px;
+  border: none !important;
+  background: #e8e8e8 !important;
+  color: #666 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  line-height: 1 !important;
+  transition: background 0.15s ease;
+}
+.hoopsy-qty-btn:hover {
+  background: #ddd !important;
+}
+.hoopsy-qty-val {
+  min-width: 22px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  padding: 0 2px;
+}
+
+/* ===================== BOX PRODUKTÓW – usunięcie białego paska ===================== */
+.woocommerce-checkout-review-order-table table.order-review {
+  display: none !important;
+}
+.woocommerce-checkout-review-order-table {
+  padding: 5px 0 !important;
+  overflow: hidden !important;
+}
+.woocommerce-checkout-review-order-table .product-container {
+  padding: 15px 20px 20px 20px !important;
+  margin: 0 !important;
+}
+.woocommerce-checkout-review-order-table .cart_item:last-child {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* ===================== MOBILE: REORDER CHECKOUT ===================== */
+/* Ukryj checkout na mobile do zakończenia reorder w JS */
+@media (max-width: 768px) {
+  form.checkout:not(.hoopsy-ready) {
+    opacity: 0 !important;
+  }
+  form.checkout.hoopsy-ready {
+    opacity: 1 !important;
+    transition: opacity 0.15s ease !important;
+  }
+}
+/* Kolejność mobile: Produkty → Dostawa → Dane → Płatność */
+@media (max-width: 768px) {
+  #customer_details .col-1,
+  #customer_details .col-2 {
+    width: 100% !important;
+    float: none !important;
+  }
+  /* Boxy szersze o 6px z każdej strony */
+  .hoopsy-box-table,
+  .hoopsy-box-header,
+  .woocommerce-checkout-review-order-table,
+  .woocommerce-billing-fields,
+  #payment {
+    margin-left: -6px !important;
+    margin-right: -6px !important;
+    box-sizing: border-box !important;
+    width: calc(100% + 12px) !important;
+  }
+  /* Billing header wewnątrz boxa */
+  .woocommerce-billing-fields h3 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  /* Symetryczny padding wewnętrzny */
+  .hoopsy-box-table td,
+  .hoopsy-box-table th {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .hoopsy-box-header {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .woocommerce-checkout-review-order-table .product-container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  #payment {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .hoopsy-box-table tr.order-total {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+  table.hoopsy-box-table tr.woocommerce-shipping-totals td {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
 }

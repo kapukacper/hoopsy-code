@@ -372,7 +372,7 @@ add_action('wp_footer', function() {
 
 // 🛍️ Zmiana CTA
 add_filter('woocommerce_order_button_text', function() {
-    return 'Kupuję i płacę';
+    return 'Zamawiam i płacę';
 });
 
 // 📜 Wyłączenie domyślnego checkboxa regulaminu
@@ -385,7 +385,7 @@ add_action('woocommerce_review_order_after_submit', function () {
     $privacy_url = home_url('/privacy-policy/');
     ?>
     <div id="hoopsy-legal-consent" style="margin-top:12px; font-size:11px; line-height:1.5; color:#444;">
-        Klikając „Kupuję i płacę” złożysz zamówienie. Kontynuując, dobrowolnie zgadzasz się z
+        Klikając „Zamawiam i płacę" złożysz zamówienie. Kontynuując, dobrowolnie zgadzasz się z
         <a href="<?php echo esc_url($terms_url); ?>" target="_blank" rel="noopener">Regulaminem sklepu</a>
         oraz <a href="<?php echo esc_url($privacy_url); ?>" target="_blank" rel="noopener">Polityką prywatności</a>
         i wyrażasz zgodę na otrzymanie rachunku w formie elektronicznej na podany adres e-mail.
@@ -1130,3 +1130,279 @@ add_action('wp_head', function() {
     </style>
     <?php
 });
+
+// 🏠 ====== WALIDACJA ADRESU – NUMER DOMU ======
+add_action('woocommerce_checkout_process', 'hoopsy_validate_address_number');
+function hoopsy_validate_address_number()
+{
+    $address = isset($_POST['billing_address_1']) ? sanitize_text_field($_POST['billing_address_1']) : '';
+    if ($address !== '' && !preg_match('/\d/', $address)) {
+        wc_add_notice('Podaj również numer domu/mieszkania w adresie.', 'error');
+    }
+}
+
+add_action('wp_footer', function () {
+    if (!function_exists('is_checkout') || !is_checkout()) return;
+?>
+<style>
+    @keyframes hoopsy-blink-red {
+        0%, 100% { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.25); }
+        50% { border-color: #ff8a80; box-shadow: 0 0 0 6px rgba(231,76,60,0.10); }
+    }
+    #billing_address_1.hoopsy-addr-error {
+        border-color: #e74c3c !important;
+        background-color: #fff5f5 !important;
+        box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
+    }
+    #billing_address_1.hoopsy-addr-blink {
+        animation: hoopsy-blink-red 0.6s ease 3 !important;
+        background-color: #fff5f5 !important;
+    }
+    #billing_address_1_field.hoopsy-row-error .select2-container,
+    #billing_address_1_field.hoopsy-row-error input,
+    #billing_address_1_field.woocommerce-validated.hoopsy-row-error input {
+        border-color: #e74c3c !important;
+        background-color: #fff5f5 !important;
+    }
+    .hoopsy-addr-warning {
+        background: #e74c3c;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 8px;
+        margin-top: 6px;
+        display: none;
+    }
+</style>
+<script>
+(function(){
+    var field, warn, row;
+    function init(){
+        field = document.getElementById('billing_address_1');
+        if(!field) return;
+        row = document.getElementById('billing_address_1_field');
+        warn = document.createElement('div');
+        warn.className = 'hoopsy-addr-warning';
+        warn.textContent = 'Podaj również numer domu/mieszkania! (np. Przyjaźni 24/8)';
+        field.parentNode.appendChild(warn);
+        field.addEventListener('blur', function(){ checkField(false); });
+        field.addEventListener('input', function(){ if(/\d/.test(field.value)) clearError(); });
+    }
+    function setError(scroll){
+        field.classList.remove('hoopsy-addr-blink');
+        void field.offsetWidth;
+        field.classList.add('hoopsy-addr-blink', 'hoopsy-addr-error');
+        if(row) row.classList.add('hoopsy-row-error');
+        warn.style.display = 'block';
+        if(scroll){
+            var rect = field.getBoundingClientRect();
+            var scrollTo = window.pageYOffset + rect.top - (window.innerHeight / 2) + (rect.height / 2);
+            window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+        }
+    }
+    function clearError(){
+        field.classList.remove('hoopsy-addr-blink', 'hoopsy-addr-error');
+        if(row) row.classList.remove('hoopsy-row-error');
+        warn.style.display = 'none';
+    }
+    function checkField(scroll){
+        if(!field) return false;
+        var val = field.value.trim();
+        if(val.length > 0 && !/\d/.test(val)){ setError(scroll); return false; }
+        return true;
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+        init();
+        document.addEventListener('click', function(e){
+            if(e.target && e.target.id === 'place_order') checkField(true);
+        });
+    });
+    if(typeof jQuery !== 'undefined'){
+        jQuery(document.body).on('checkout_error', function(){
+            if(!field) return;
+            var val = field.value.trim();
+            if(val.length > 0 && !/\d/.test(val)){
+                document.querySelectorAll('.woocommerce-error li').forEach(function(li){
+                    if(/numer domu/i.test(li.textContent)) li.style.display = 'none';
+                });
+                var errorList = document.querySelector('.woocommerce-error');
+                if(errorList){
+                    var visible = Array.from(errorList.querySelectorAll('li')).filter(function(li){ return li.style.display !== 'none'; });
+                    if(visible.length === 0) errorList.style.display = 'none';
+                }
+                setTimeout(function(){ jQuery('html, body').stop(true); setError(true); }, 50);
+            }
+        });
+    }
+})();
+</script>
+<?php
+});
+
+// 💰 ====== CHECKOUT: CENA REGULARNA POD PROMOCYJNĄ ======
+add_filter('woocommerce_cart_item_subtotal', 'hoopsy_checkout_show_regular_price', 10, 3);
+function hoopsy_checkout_show_regular_price($subtotal, $cart_item, $cart_item_key)
+{
+    if (!is_checkout()) return $subtotal;
+    $product = $cart_item['data'];
+    if (!$product->is_on_sale()) return $subtotal;
+    $qty = $cart_item['quantity'];
+    $regular_total = (float) $product->get_regular_price() * $qty;
+    $subtotal = '<span class="hoopsy-prices-wrap">' . $subtotal
+        . '<span class="hoopsy-old-price">' . wc_price($regular_total) . '</span></span>';
+    return $subtotal;
+}
+
+// 🔢 ====== CHECKOUT: PLUS/MINUS PRZY ILOŚCI ======
+add_filter('woocommerce_checkout_cart_item_quantity', 'hoopsy_checkout_qty_buttons', 10, 3);
+function hoopsy_checkout_qty_buttons($quantity_html, $cart_item, $cart_item_key)
+{
+    $qty = $cart_item['quantity'];
+    return '<span class="hoopsy-qty-wrap" data-cart-key="' . esc_attr($cart_item_key) . '">'
+        . '<button type="button" class="hoopsy-qty-btn hoopsy-qty-minus" aria-label="Mniej">−</button>'
+        . '<span class="hoopsy-qty-val">' . esc_html($qty) . '</span>'
+        . '<button type="button" class="hoopsy-qty-btn hoopsy-qty-plus" aria-label="Więcej">+</button>'
+        . '</span>';
+}
+
+// 🔢 ====== AJAX: AKTUALIZACJA ILOŚCI Z CHECKOUT ======
+add_action('wp_ajax_hoopsy_update_qty', 'hoopsy_ajax_update_qty');
+add_action('wp_ajax_nopriv_hoopsy_update_qty', 'hoopsy_ajax_update_qty');
+function hoopsy_ajax_update_qty()
+{
+    $key = sanitize_text_field($_POST['cart_key'] ?? '');
+    $qty = absint($_POST['qty'] ?? 0);
+    if (!$key) { wp_send_json_error(); }
+    if ($qty === 0) { WC()->cart->remove_cart_item($key); }
+    else { WC()->cart->set_quantity($key, $qty, true); }
+    wp_send_json_success();
+}
+
+// 📝 ====== ZMIANA "ZAWIERA" NA "W TYM" PRZY VAT ======
+add_filter('gettext', 'hoopsy_change_vat_text', 10, 3);
+function hoopsy_change_vat_text($translated, $text, $domain)
+{
+    if ($domain === 'woocommerce' && strpos($translated, 'zawiera') !== false) {
+        $translated = str_replace('zawiera', 'w tym', $translated);
+    }
+    return $translated;
+}
+
+// 🛒 ====== CHECKOUT: ROZDZIELENIE PRODUKTÓW OD DOSTAWY W BOXY ======
+add_action('wp_footer', function () {
+    if (!function_exists('is_checkout') || !is_checkout()) return;
+?>
+<script>
+    jQuery(function ($) {
+        function setupCheckoutBoxes() {
+            var table = $('.woocommerce-checkout-review-order-table');
+            if (!table.length) return;
+            $('.hoopsy-products-box').remove();
+            $('.hoopsy-delivery-header-el').remove();
+            $('.hoopsy-payment-header').remove();
+            var tbody = table.find('tbody');
+            if (!tbody.length || !tbody.find('tr').length) return;
+
+            var productsBox = $('<div class="hoopsy-products-box"></div>');
+            productsBox.append('<div class="hoopsy-box-header"><span class="hoopsy-step-num">2</span> DOSTAWA I PODSUMOWANIE</div>');
+            var productsTable = $('<table class="hoopsy-box-table"></table>');
+            productsTable.append(tbody.detach());
+            productsBox.append(productsTable);
+
+            var deliveryHeader = $('<div class="hoopsy-delivery-header-el hoopsy-box-header"><span class="hoopsy-step-num">1</span> KOSZYK Z PRODUKTAMI</div>');
+            table.before(deliveryHeader);
+            table.after(productsBox);
+            table.find('thead').hide();
+
+            var payment = $('#payment');
+            if (payment.length && !payment.prev('.hoopsy-payment-header').length) {
+                payment.before('<div class="hoopsy-payment-header hoopsy-box-header"><span class="hoopsy-step-num">4</span> METODA PŁATNOŚCI</div>');
+            }
+        }
+
+        setupCheckoutBoxes();
+
+        var billingH3 = $('.woocommerce-billing-fields h3');
+        if (billingH3.length && !billingH3.find('.hoopsy-step-num').length) {
+            billingH3.prepend('<span class="hoopsy-step-num">3</span> ');
+        }
+
+        mobileReorder();
+        $('form.checkout').addClass('hoopsy-ready');
+
+        var savedScroll = null;
+        $(document.body).on('update_checkout', function () { savedScroll = window.pageYOffset; });
+        $(document.body).on('updated_checkout', function () {
+            setupCheckoutBoxes();
+            mobileReorder();
+            if (savedScroll !== null) { window.scrollTo(0, savedScroll); savedScroll = null; }
+        });
+
+        var currentLayout = 'desktop';
+        function mobileReorder() {
+            if (window.innerWidth > 768) { if (currentLayout === 'mobile') desktopReorder(); return; }
+            if (currentLayout === 'mobile') return;
+            currentLayout = 'mobile';
+            var customerDetails = $('#customer_details');
+            var col1 = customerDetails.children('.col-1');
+            var col2 = customerDetails.children('.col-2');
+            if (!col1.length || !col2.length) return;
+            col1.css({ float: 'none', width: '100%' });
+            col2.css({ float: 'none', width: '100%' });
+            col2.insertBefore(col1);
+            var orderReview = $('#order_review');
+            var deliveryHeader = orderReview.find('.hoopsy-delivery-header-el');
+            var productsTable = orderReview.find('.woocommerce-checkout-review-order-table');
+            var productsBox = orderReview.find('.hoopsy-products-box');
+            orderReview.prepend(productsBox);
+            orderReview.prepend(productsTable);
+            orderReview.prepend(deliveryHeader);
+            var paymentHeader = $('.hoopsy-payment-header');
+            var payment = $('#payment');
+            col1.after(payment);
+            col1.after(paymentHeader);
+        }
+
+        function desktopReorder() {
+            currentLayout = 'desktop';
+            var customerDetails = $('#customer_details');
+            var col1 = customerDetails.children('.col-1');
+            var col2 = customerDetails.children('.col-2');
+            if (!col1.length || !col2.length) return;
+            col1.css({ float: '', width: '' });
+            col2.css({ float: '', width: '' });
+            col1.insertBefore(col2);
+            var orderReview = $('#order_review');
+            var paymentHeader = $('.hoopsy-payment-header');
+            var payment = $('#payment');
+            orderReview.append(paymentHeader);
+            orderReview.append(payment);
+            var deliveryHeader = orderReview.find('.hoopsy-delivery-header-el');
+            var productsTable = orderReview.find('.woocommerce-checkout-review-order-table');
+            var productsBox = orderReview.find('.hoopsy-products-box');
+            productsTable.before(deliveryHeader);
+            productsTable.after(productsBox);
+        }
+
+        $(window).on('resize', function () { mobileReorder(); });
+
+        $(document).on('click', '.hoopsy-qty-btn', function () {
+            var wrap = $(this).closest('.hoopsy-qty-wrap');
+            var valEl = wrap.find('.hoopsy-qty-val');
+            var qty = parseInt(valEl.text(), 10) || 1;
+            var cartKey = wrap.data('cart-key');
+            if ($(this).hasClass('hoopsy-qty-plus')) { qty++; }
+            else { qty = Math.max(0, qty - 1); }
+            valEl.text(qty);
+            wrap.css('opacity', '0.5');
+            $.post(wc_checkout_params.ajax_url, {
+                action: 'hoopsy_update_qty',
+                cart_key: cartKey,
+                qty: qty
+            }, function () { $(document.body).trigger('update_checkout'); });
+        });
+    });
+</script>
+<?php
+}, 999);
