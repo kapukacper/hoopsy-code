@@ -665,6 +665,14 @@ h2.wcqcs-cross-sells-title,
   white-space: normal !important;
 }
 
+/* Cena dostawy – zielona (kwota + waluta) */
+#shipping_method li label .woocommerce-Price-amount,
+.woocommerce-shipping-methods label .woocommerce-Price-amount,
+#shipping_method li label .woocommerce-Price-currencySymbol,
+.woocommerce-shipping-methods label .woocommerce-Price-currencySymbol {
+  color: #32b632 !important;
+}
+
 #shipping_method_0_flexible_shipping_single1+label {
   color: #32b632 !important;
 }
@@ -793,11 +801,10 @@ h2.wcqcs-cross-sells-title,
 
 .hoopsy-faq-item {
   border: none !important;
-  border-bottom: 1px solid #eee !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
+  border-radius: 12px !important;
+  margin: 0 0 9px 0 !important;
   padding: 0 !important;
-  background: transparent !important;
+  background: #fff !important;
   overflow: hidden;
   box-shadow: none !important;
 }

@@ -270,14 +270,14 @@ add_action('woocommerce_checkout_process', function() {
     }
 });
 
-// 📱 Shortcode nad checkoutem (mobile)
-add_action('woocommerce_before_checkout_form', function() {
-    if (function_exists('is_checkout') && is_checkout() && !is_wc_endpoint_url()) {
-        echo '<div class="dn-mobile-only" style="text-align:center; margin-top:-20px; margin-bottom:10px;">'
-            . do_shortcode('[DropNinja_HurryUp id="12476"]')
-            . '</div>';
-    }
-}, 1);
+// Shortcode nad checkoutem – WYŁĄCZONY (timer DropNinja usunięty)
+// add_action('woocommerce_before_checkout_form', function() {
+//     if (function_exists('is_checkout') && is_checkout() && !is_wc_endpoint_url()) {
+//         echo '<div class="dn-mobile-only" style="text-align:center; margin-top:-20px; margin-bottom:10px;">'
+//             . do_shortcode('[DropNinja_HurryUp id="12476"]')
+//             . '</div>';
+//     }
+// }, 1);
 
 // 💳 Domyślna metoda płatności - PayU
 add_action('wp_footer', function() {
@@ -1285,6 +1285,9 @@ function hoopsy_change_vat_text($translated, $text, $domain)
 {
     if ($domain === 'woocommerce' && strpos($translated, 'zawiera') !== false) {
         $translated = str_replace('zawiera', 'w tym', $translated);
+    }
+    if ($domain === 'woocommerce' && $text === 'Billing details') {
+        return 'Dane do zamówienia';
     }
     return $translated;
 }
