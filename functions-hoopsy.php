@@ -527,10 +527,10 @@ function hoopsy_faq_accordion() {
     if (!in_array($pid, $faq_product_ids, true)) return;
 
     $q = 'background:#fff !important;border:none;border-radius:12px;margin:0 0 9px 0;overflow:hidden;box-shadow:none;';
-    $s = 'cursor:pointer;padding:7px 30px 7px 12px;font-size:13px;font-weight:500;color:#555;list-style:none;position:relative;';
+    $s = 'cursor:pointer;padding:7px 30px 7px 12px;font-size:13px;font-weight:500;color:#555;list-style:none;position:relative;white-space:nowrap;';
     $a = 'padding:0 12px 8px 12px;font-size:13px;line-height:1.5;color:#777;';
     $dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1ec13a;margin-right:6px;flex-shrink:0;vertical-align:middle;"></span>';
-    $arrow = '<span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.6em;color:#f84077;">▼</span>';
+    $arrow = '<span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.8em;color:#f84077;">▼</span>';
 
     echo '<div style="margin:-1px 0 0 0;width:100%;background:#f84077;border:none;border-radius:12px;padding:10px;box-sizing:border-box;">
         <style>
@@ -818,6 +818,11 @@ add_action('wp_footer', function () {
         if(ebookBox){
           var ebookRect = ebookBox.getBoundingClientRect();
           if(ebookRect.top + 65 < window.innerHeight) show = true;
+        }
+        // Fallback: gdy nie ma ebooka, pokaż po przescrollowaniu głównego ATC
+        else if(mainBtn){
+          var btnRect = mainBtn.getBoundingClientRect();
+          if(btnRect.bottom < 0) show = true;
         }
 
         // Ukryj gdy główny przycisk ATC jest widoczny
