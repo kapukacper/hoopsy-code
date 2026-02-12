@@ -1417,23 +1417,26 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 }
 
 /* ===================== MOBILE: REORDER CHECKOUT ===================== */
-/* Ukryj checkout na mobile do zakończenia reorder w JS */
+/* CSS order zamiast JS reorder → brak flasha (opacity:0 usunięte) */
 @media (max-width: 768px) {
-  form.checkout:not(.hoopsy-ready) {
-    opacity: 0 !important;
+  /* Flex container na kolumny → CSS order zamiast JS swap */
+  #customer_details {
+    display: flex !important;
+    flex-direction: column !important;
   }
-  form.checkout.hoopsy-ready {
-    opacity: 1 !important;
-    transition: opacity 0.15s ease !important;
+  #customer_details .col-1 {
+    width: 100% !important;
+    float: none !important;
+    order: 2 !important;
   }
-}
-/* Kolejność mobile: Produkty → Dostawa → Dane → Płatność */
-@media (max-width: 768px) {
-  #customer_details .col-1,
   #customer_details .col-2 {
     width: 100% !important;
     float: none !important;
+    order: 1 !important;
   }
+  /* Payment przenoszone przez JS — niech ma odpowiedni order */
+  #customer_details .hoopsy-payment-header { order: 3 !important; }
+  #customer_details #payment { order: 4 !important; }
   /* Boxy szersze o 6px z każdej strony */
   .hoopsy-box-table,
   .hoopsy-box-header,
@@ -1480,4 +1483,236 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     padding-left: 12px !important;
     padding-right: 12px !important;
   }
+}
+
+/* ============================================================ */
+/* CZĘŚĆ 5: GLOBALNE STYLE (KOSZYK / OBRAZKI / PASKI)           */
+/* (przeniesione z inline wp_head → plik CSS = cache)           */
+/* ============================================================ */
+
+/* --- koszyk: ukrycie wybranych elementów --- */
+.cart-subtotal,
+.woocommerce-form-coupon-toggle,
+.woocommerce-cart-form .coupon,
+.cart_totals h2,
+.woocommerce-message {
+    display: none !important;
+}
+
+.woocommerce-cart-form .actions button[name="update_cart"],
+.woocommerce-cart-form .actions .button {
+    display: none !important;
+}
+
+.woocommerce-cart-form .product-thumbnail img {
+    width: 20% !important;
+    height: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+    .checkout-button { margin-top: 0 !important; }
+    .woocommerce-cart-form { margin-top: -30px !important; }
+}
+
+/* --- stabilne proporcje obrazków --- */
+.mobile-only img,
+.woocommerce-after-cart img,
+.checkout-promo-image img,
+.woocommerce img[alt="Hoopsy promo"],
+.woocommerce img[alt="Dostawa w 24h"] {
+    width: 100% !important;
+    max-width: 420px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 15px !important;
+    display: block !important;
+    margin: 0 auto 10px auto !important;
+}
+
+.mobile-only,
+.checkout-promo-image {
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+@media (max-width: 480px) {
+    .mobile-only img,
+    .checkout-promo-image img {
+        max-width: 100% !important;
+    }
+}
+
+/* --- wspólny styl paska wysyłki/zaufania --- */
+.pasek-zaufania-salient .pasek-wysylka-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #1ec13a;
+    box-shadow: 0 0 0 0 rgba(30, 193, 58, .7);
+    animation: pasek-dot-blink 1.4s infinite ease-out;
+    flex: 0 0 9px;
+    display: inline-block;
+}
+
+@keyframes pasek-dot-blink {
+    0% { box-shadow: 0 0 0 0 rgba(30, 193, 58, .7); opacity: 1; }
+    60% { box-shadow: 0 0 0 8px rgba(30, 193, 58, 0); opacity: .5; }
+    100% { box-shadow: 0 0 0 0 rgba(30, 193, 58, 0); opacity: 1; }
+}
+
+.pasek-zaufania-salient .pasek-flag-pl {
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+    overflow: hidden;
+    display: inline-flex;
+    flex-direction: column;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .06);
+    flex: 0 0 18px;
+}
+
+.pasek-zaufania-salient .pasek-flag-pl-top { flex: 1; background: #fff; }
+.pasek-zaufania-salient .pasek-flag-pl-bottom { flex: 1; background: #d81b3f; }
+
+.pasek-zaufania-salient .pasek-zaufania {
+    padding: 10px 14px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.pasek-zaufania-salient .pasek-zaufania-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 50%;
+}
+
+.pasek-zaufania-salient .pasek-zaufania-icon {
+    flex: 0 0 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pasek-zaufania-salient .pasek-zaufania-text {
+    flex: 1 1 auto;
+    line-height: 1.3;
+    white-space: normal;
+}
+
+.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child { gap: 4px; }
+.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child .pasek-zaufania-text { white-space: nowrap; }
+
+.pasek-zaufania-salient .pasek-platnosci {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 4px;
+    margin-top: 4px;
+    border-radius: 12px;
+    border: 1px solid #f5f5f5;
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 0;
+}
+
+.pasek-zaufania-salient .pasek-platnosci .pasek-logo { height: 32px; display: block; }
+.pasek-zaufania-salient .pasek-platnosci .pasek-logo-wz { height: 29px; }
+.pasek-zaufania-salient .pasek-platnosci .pasek-logo-inpost,
+.pasek-zaufania-salient .pasek-platnosci .pasek-logo-p24 { height: 37px; }
+
+.pasek-zaufania-salient .pasek-platnosci .pasek-separator {
+    width: 1px;
+    height: 30px;
+    background: #ddd;
+    display: block;
+    flex: 0 0 auto;
+}
+
+.pasek-zaufania-salient .hoopsy-metody-inline {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.pasek-zaufania-salient .hoopsy-metoda-separator {
+    width: 1px;
+    height: 16px;
+    background: #c6c6c6;
+    display: inline-block;
+}
+
+@media (max-width: 480px) {
+    .pasek-zaufania-salient .pasek-zaufania { padding: 8px 10px; font-size: 13px; gap: 10px; }
+    .pasek-zaufania-salient .pasek-platnosci { padding: 8px 4px; }
+    .pasek-zaufania-salient .pasek-platnosci .pasek-logo { height: 22px; }
+    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-wz { height: 20px; }
+    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-inpost,
+    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-p24 { height: 25px; }
+    .pasek-zaufania-salient .pasek-platnosci .pasek-separator { height: 24px; }
+    .pasek-zaufania-salient .hoopsy-metody-inline { font-size: 12px; gap: 8px; }
+}
+
+@media screen and (min-width: 768px) {
+    .dn-mobile-only, .mobile-only { display: none !important; }
+}
+
+/* --- opis czasu dostawy pod metodami wysyłki --- */
+.shipping-method-description {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: #ededed;
+    padding: 2px 10px 5px 10px;
+    border-radius: 5px;
+    margin: 4px 0 20px 0 !important;
+}
+
+/* --- walidacja adresu (brak numeru domu) --- */
+@keyframes hoopsy-blink-red {
+    0%, 100% { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.25); }
+    50% { border-color: #ff8a80; box-shadow: 0 0 0 6px rgba(231,76,60,0.10); }
+}
+#billing_address_1.hoopsy-addr-error {
+    border-color: #e74c3c !important;
+    background-color: #fff5f5 !important;
+    box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
+}
+#billing_address_1.hoopsy-addr-blink {
+    animation: hoopsy-blink-red 0.6s ease 3 !important;
+    background-color: #fff5f5 !important;
+}
+#billing_address_1_field.hoopsy-row-error .select2-container,
+#billing_address_1_field.hoopsy-row-error input,
+#billing_address_1_field.woocommerce-validated.hoopsy-row-error input {
+    border-color: #e74c3c !important;
+    background-color: #fff5f5 !important;
+}
+.hoopsy-addr-warning {
+    background: #e74c3c;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-top: 6px;
+    display: none;
 }

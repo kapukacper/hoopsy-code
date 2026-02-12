@@ -27,6 +27,40 @@ function salient_child_enqueue_styles() {
     }
 }
 
+// ⚡ PRZYSPIESZENIE KASY – usunięcie zbędnych skryptów/stylów na checkout
+add_action('wp_enqueue_scripts', 'hoopsy_checkout_dequeue', 999);
+function hoopsy_checkout_dequeue() {
+    if (!function_exists('is_checkout') || !is_checkout()) return;
+
+    // CSS – zbędne na kasie
+    wp_dequeue_style('dashicons');
+    wp_dequeue_style('admin-bar');
+    wp_dequeue_style('owl.carousel');
+    wp_dequeue_style('owl.theme.default');
+    wp_dequeue_style('contact-form-7');
+    wp_dequeue_style('nectar-cf7');
+    wp_dequeue_style('fancyBox');
+    wp_dequeue_style('duplicate-post');
+    wp_dequeue_style('nectar-ocm-core');
+    wp_dequeue_style('nectar-ocm-simple');
+
+    // JS – zbędne na kasie
+    wp_dequeue_script('owl.carousel');
+    wp_dequeue_script('hoverintent-js');
+    wp_dequeue_script('hoverintent');
+    wp_dequeue_script('admin-bar');
+    wp_dequeue_script('contact-form-7');
+    wp_dequeue_script('swv');
+    wp_dequeue_script('jquery-easing');
+    wp_dequeue_script('jquery-mousewheel');
+    wp_dequeue_script('nectar-waypoints');
+    wp_dequeue_script('imagesLoaded');
+    wp_dequeue_script('nectar-transit');
+
+    // Duplikat select2 (selectWoo wystarczy)
+    wp_dequeue_script('wc-select2');
+    wp_dequeue_style('select2');
+}
 
 function hoopsy_is_trust_product($product = null) {
     if (!$product instanceof WC_Product) {
@@ -58,201 +92,9 @@ function hoopsy_get_shipping_meta($product_id = 0) {
 }
 
 /* =========================================================
- * 2) GLOBALNE STYLE (KOSZYK / OBRAZKI / PASKI)
+ * 2) GLOBALNE STYLE → przeniesione do style-hoopsy.css (CZĘŚĆ 5)
+ *    (cache przeglądarki zamiast inline <style> w każdym request)
  * =======================================================*/
-
-add_action('wp_head', function() {
-    if (is_admin()) {
-        return;
-    }
-
-    echo '<style>
-    /* --- koszyk: ukrycie wybranych elementów --- */
-    .cart-subtotal,
-    .woocommerce-form-coupon-toggle,
-    .woocommerce-cart-form .coupon,
-    .cart_totals h2,
-    .woocommerce-message {
-        display: none !important;
-    }
-
-    .woocommerce-cart-form .actions button[name="update_cart"],
-    .woocommerce-cart-form .actions .button {
-        display: none !important;
-    }
-
-    .woocommerce-cart-form .product-thumbnail img {
-        width: 20% !important;
-        height: auto !important;
-    }
-
-    @media screen and (max-width: 768px) {
-        .checkout-button { margin-top: 0 !important; }
-        .woocommerce-cart-form { margin-top: -30px !important; }
-    }
-
-    /* --- stabilne proporcje obrazków --- */
-    .mobile-only img,
-    .woocommerce-after-cart img,
-    .checkout-promo-image img,
-    .woocommerce img[alt="Hoopsy promo"],
-    .woocommerce img[alt="Dostawa w 24h"] {
-        width: 100% !important;
-        max-width: 420px !important;
-        height: auto !important;
-        object-fit: contain !important;
-        border-radius: 15px !important;
-        display: block !important;
-        margin: 0 auto 10px auto !important;
-    }
-
-    .mobile-only,
-    .checkout-promo-image {
-        text-align: center !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    @media (max-width: 480px) {
-        .mobile-only img,
-        .checkout-promo-image img {
-            max-width: 100% !important;
-        }
-    }
-
-    /* --- wspólny styl paska wysyłki/zaufania --- */
-    .pasek-zaufania-salient .pasek-wysylka-dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #1ec13a;
-        box-shadow: 0 0 0 0 rgba(30, 193, 58, .7);
-        animation: pasek-dot-blink 1.4s infinite ease-out;
-        flex: 0 0 9px;
-        display: inline-block;
-    }
-
-    @keyframes pasek-dot-blink {
-        0% { box-shadow: 0 0 0 0 rgba(30, 193, 58, .7); opacity: 1; }
-        60% { box-shadow: 0 0 0 8px rgba(30, 193, 58, 0); opacity: .5; }
-        100% { box-shadow: 0 0 0 0 rgba(30, 193, 58, 0); opacity: 1; }
-    }
-
-    .pasek-zaufania-salient .pasek-flag-pl {
-        width: 18px;
-        height: 12px;
-        border-radius: 2px;
-        overflow: hidden;
-        display: inline-flex;
-        flex-direction: column;
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, .06);
-        flex: 0 0 18px;
-    }
-
-    .pasek-zaufania-salient .pasek-flag-pl-top { flex: 1; background: #fff; }
-    .pasek-zaufania-salient .pasek-flag-pl-bottom { flex: 1; background: #d81b3f; }
-
-    .pasek-zaufania-salient .pasek-zaufania {
-        padding: 10px 14px;
-        background: #f5f5f5;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        text-align: left;
-        font-size: 15px;
-        font-weight: 500;
-        box-sizing: border-box;
-    }
-
-    .pasek-zaufania-salient .pasek-zaufania-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 0;
-        flex: 1 1 50%;
-    }
-
-    .pasek-zaufania-salient .pasek-zaufania-icon {
-        flex: 0 0 26px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .pasek-zaufania-salient .pasek-zaufania-text {
-        flex: 1 1 auto;
-        line-height: 1.3;
-        white-space: normal;
-    }
-
-    .pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child { gap: 4px; }
-    .pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child .pasek-zaufania-text { white-space: nowrap; }
-
-    .pasek-zaufania-salient .pasek-platnosci {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 10px 4px;
-        margin-top: 4px;
-        border-radius: 12px;
-        border: 1px solid #f5f5f5;
-        box-sizing: border-box;
-        flex-wrap: nowrap;
-        white-space: nowrap;
-        gap: 0;
-    }
-
-    .pasek-zaufania-salient .pasek-platnosci .pasek-logo { height: 32px; display: block; }
-    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-wz { height: 29px; }
-    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-inpost,
-    .pasek-zaufania-salient .pasek-platnosci .pasek-logo-p24 { height: 37px; }
-
-    .pasek-zaufania-salient .pasek-platnosci .pasek-separator {
-        width: 1px;
-        height: 30px;
-        background: #ddd;
-        display: block;
-        flex: 0 0 auto;
-    }
-
-    .pasek-zaufania-salient .hoopsy-metody-inline {
-        margin-top: 4px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #444;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        white-space: nowrap;
-    }
-
-    .pasek-zaufania-salient .hoopsy-metoda-separator {
-        width: 1px;
-        height: 16px;
-        background: #c6c6c6;
-        display: inline-block;
-    }
-
-    @media (max-width: 480px) {
-        .pasek-zaufania-salient .pasek-zaufania { padding: 8px 10px; font-size: 13px; gap: 10px; }
-        .pasek-zaufania-salient .pasek-platnosci { padding: 8px 4px; }
-        .pasek-zaufania-salient .pasek-platnosci .pasek-logo { height: 22px; }
-        .pasek-zaufania-salient .pasek-platnosci .pasek-logo-wz { height: 20px; }
-        .pasek-zaufania-salient .pasek-platnosci .pasek-logo-inpost,
-        .pasek-zaufania-salient .pasek-platnosci .pasek-logo-p24 { height: 25px; }
-        .pasek-zaufania-salient .pasek-platnosci .pasek-separator { height: 24px; }
-        .pasek-zaufania-salient .hoopsy-metody-inline { font-size: 12px; gap: 8px; }
-    }
-
-    @media screen and (min-width: 768px) {
-        .dn-mobile-only, .mobile-only { display: none !important; }
-    }
-    </style>';
-}, 20);
 
 /* =========================================================
  * 3) KOSZYK / CHECKOUT
@@ -279,19 +121,7 @@ add_action('woocommerce_checkout_process', function() {
 //     }
 // }, 1);
 
-// 💳 Domyślna metoda płatności - PayU
-add_action('wp_footer', function() {
-    if (!is_checkout()) {
-        return;
-    }
-
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var payu = document.querySelector("#payment_method_payulistbanks");
-        if (payu) { payu.checked = true; }
-    });
-    </script>';
-});
+// 💳 Domyślna metoda płatności - PayU → przeniesione do głównego bloku checkout JS
 
 // 🚫 Blokada COD dla produktu 11245
 add_filter('woocommerce_available_payment_gateways', function($available_gateways) {
@@ -335,40 +165,7 @@ add_action('woocommerce_after_cart', function() {
     </div>';
 });
 
-// 🕒 Opis czasu dostawy pod każdą metodą wysyłki
-add_action('wp_footer', function() {
-    if (!is_checkout()) {
-        return;
-    }
-    ?>
-    <script>
-    function addShippingDescriptions() {
-      document.querySelectorAll('ul.woocommerce-shipping-methods li label').forEach(function(label) {
-        if (!label.parentElement.querySelector('.shipping-method-description')) {
-          const p = document.createElement('p');
-          p.className = 'shipping-method-description';
-          p.innerText = 'Czas dostawy - 1 dzień roboczy';
-          label.insertAdjacentElement('afterend', p);
-        }
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', addShippingDescriptions);
-    jQuery(document.body).on('updated_checkout', addShippingDescriptions);
-    </script>
-    <style>
-    .shipping-method-description {
-        font-size: 11px;
-        text-transform: uppercase;
-        font-weight: 600;
-        background: #ededed;
-        padding: 2px 10px 5px 10px;
-        border-radius: 5px;
-        margin: 4px 0 20px 0 !important;
-    }
-    </style>
-    <?php
-});
+// 🕒 Opis czasu dostawy → przeniesione do głównego bloku checkout JS (CSS w style-hoopsy.css)
 
 // 🛍️ Zmiana CTA
 add_filter('woocommerce_order_button_text', function() {
@@ -1146,104 +943,7 @@ function hoopsy_validate_address_number()
     }
 }
 
-add_action('wp_footer', function () {
-    if (!function_exists('is_checkout') || !is_checkout()) return;
-?>
-<style>
-    @keyframes hoopsy-blink-red {
-        0%, 100% { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.25); }
-        50% { border-color: #ff8a80; box-shadow: 0 0 0 6px rgba(231,76,60,0.10); }
-    }
-    #billing_address_1.hoopsy-addr-error {
-        border-color: #e74c3c !important;
-        background-color: #fff5f5 !important;
-        box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
-    }
-    #billing_address_1.hoopsy-addr-blink {
-        animation: hoopsy-blink-red 0.6s ease 3 !important;
-        background-color: #fff5f5 !important;
-    }
-    #billing_address_1_field.hoopsy-row-error .select2-container,
-    #billing_address_1_field.hoopsy-row-error input,
-    #billing_address_1_field.woocommerce-validated.hoopsy-row-error input {
-        border-color: #e74c3c !important;
-        background-color: #fff5f5 !important;
-    }
-    .hoopsy-addr-warning {
-        background: #e74c3c;
-        color: #fff;
-        font-size: 13px;
-        font-weight: 600;
-        padding: 8px 14px;
-        border-radius: 8px;
-        margin-top: 6px;
-        display: none;
-    }
-</style>
-<script>
-(function(){
-    var field, warn, row;
-    function init(){
-        field = document.getElementById('billing_address_1');
-        if(!field) return;
-        row = document.getElementById('billing_address_1_field');
-        warn = document.createElement('div');
-        warn.className = 'hoopsy-addr-warning';
-        warn.textContent = 'Podaj również numer domu/mieszkania! (np. Przyjaźni 24/8)';
-        field.parentNode.appendChild(warn);
-        field.addEventListener('blur', function(){ checkField(false); });
-        field.addEventListener('input', function(){ if(/\d/.test(field.value)) clearError(); });
-    }
-    function setError(scroll){
-        field.classList.remove('hoopsy-addr-blink');
-        void field.offsetWidth;
-        field.classList.add('hoopsy-addr-blink', 'hoopsy-addr-error');
-        if(row) row.classList.add('hoopsy-row-error');
-        warn.style.display = 'block';
-        if(scroll){
-            var rect = field.getBoundingClientRect();
-            var scrollTo = window.pageYOffset + rect.top - (window.innerHeight / 2) + (rect.height / 2);
-            window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-        }
-    }
-    function clearError(){
-        field.classList.remove('hoopsy-addr-blink', 'hoopsy-addr-error');
-        if(row) row.classList.remove('hoopsy-row-error');
-        warn.style.display = 'none';
-    }
-    function checkField(scroll){
-        if(!field) return false;
-        var val = field.value.trim();
-        if(val.length > 0 && !/\d/.test(val)){ setError(scroll); return false; }
-        return true;
-    }
-    document.addEventListener('DOMContentLoaded', function(){
-        init();
-        document.addEventListener('click', function(e){
-            if(e.target && e.target.id === 'place_order') checkField(true);
-        });
-    });
-    if(typeof jQuery !== 'undefined'){
-        jQuery(document.body).on('checkout_error', function(){
-            if(!field) return;
-            var val = field.value.trim();
-            if(val.length > 0 && !/\d/.test(val)){
-                document.querySelectorAll('.woocommerce-error li').forEach(function(li){
-                    if(/numer domu/i.test(li.textContent)) li.style.display = 'none';
-                });
-                var errorList = document.querySelector('.woocommerce-error');
-                if(errorList){
-                    var visible = Array.from(errorList.querySelectorAll('li')).filter(function(li){ return li.style.display !== 'none'; });
-                    if(visible.length === 0) errorList.style.display = 'none';
-                }
-                setTimeout(function(){ jQuery('html, body').stop(true); setError(true); }, 50);
-            }
-        });
-    }
-})();
-</script>
-<?php
-});
+// 📍 Walidacja adresu → przeniesione do głównego bloku checkout JS (CSS w style-hoopsy.css)
 
 // 💰 ====== CHECKOUT: CENA REGULARNA POD PROMOCYJNĄ ======
 add_filter('woocommerce_cart_item_subtotal', 'hoopsy_checkout_show_regular_price', 10, 3);
@@ -1288,20 +988,105 @@ function hoopsy_ajax_update_qty()
 add_filter('gettext', 'hoopsy_change_vat_text', 10, 3);
 function hoopsy_change_vat_text($translated, $text, $domain)
 {
-    if ($domain === 'woocommerce' && strpos($translated, 'zawiera') !== false) {
+    if ($domain !== 'woocommerce') return $translated;
+    if (!is_checkout() && !is_cart()) return $translated;
+
+    if (strpos($translated, 'zawiera') !== false) {
         $translated = str_replace('zawiera', 'w tym', $translated);
     }
-    if ($domain === 'woocommerce' && $text === 'Billing details') {
+    if ($text === 'Billing details') {
         return 'Dane do zamówienia';
     }
     return $translated;
 }
 
-// 🛒 ====== CHECKOUT: ROZDZIELENIE PRODUKTÓW OD DOSTAWY W BOXY ======
+// 🛒 ====== CHECKOUT: JEDEN BLOK JS (boxy, reorder, PayU, opisy dostawy, walidacja adresu) ======
 add_action('wp_footer', function () {
     if (!function_exists('is_checkout') || !is_checkout()) return;
 ?>
 <script>
+    /* 💳 Domyślna metoda płatności - PayU */
+    document.addEventListener("DOMContentLoaded", function() {
+        var payu = document.querySelector("#payment_method_payulistbanks");
+        if (payu) { payu.checked = true; }
+    });
+
+    /* 🕒 Opisy czasu dostawy pod metodami wysyłki */
+    function addShippingDescriptions() {
+      document.querySelectorAll('ul.woocommerce-shipping-methods li label').forEach(function(label) {
+        if (!label.parentElement.querySelector('.shipping-method-description')) {
+          var p = document.createElement('p');
+          p.className = 'shipping-method-description';
+          p.innerText = 'Czas dostawy - 1 dzień roboczy';
+          label.insertAdjacentElement('afterend', p);
+        }
+      });
+    }
+    document.addEventListener('DOMContentLoaded', addShippingDescriptions);
+
+    /* 📍 Walidacja adresu (numer domu) */
+    (function(){
+        var field, warn, row;
+        function init(){
+            field = document.getElementById('billing_address_1');
+            if(!field) return;
+            row = document.getElementById('billing_address_1_field');
+            warn = document.createElement('div');
+            warn.className = 'hoopsy-addr-warning';
+            warn.textContent = 'Podaj również numer domu/mieszkania! (np. Przyjaźni 24/8)';
+            field.parentNode.appendChild(warn);
+            field.addEventListener('blur', function(){ checkField(false); });
+            field.addEventListener('input', function(){ if(/\d/.test(field.value)) clearError(); });
+        }
+        function setError(scroll){
+            field.classList.remove('hoopsy-addr-blink');
+            void field.offsetWidth;
+            field.classList.add('hoopsy-addr-blink', 'hoopsy-addr-error');
+            if(row) row.classList.add('hoopsy-row-error');
+            warn.style.display = 'block';
+            if(scroll){
+                var rect = field.getBoundingClientRect();
+                var scrollTo = window.pageYOffset + rect.top - (window.innerHeight / 2) + (rect.height / 2);
+                window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+            }
+        }
+        function clearError(){
+            field.classList.remove('hoopsy-addr-blink', 'hoopsy-addr-error');
+            if(row) row.classList.remove('hoopsy-row-error');
+            warn.style.display = 'none';
+        }
+        function checkField(scroll){
+            if(!field) return false;
+            var val = field.value.trim();
+            if(val.length > 0 && !/\d/.test(val)){ setError(scroll); return false; }
+            return true;
+        }
+        document.addEventListener('DOMContentLoaded', function(){
+            init();
+            document.addEventListener('click', function(e){
+                if(e.target && e.target.id === 'place_order') checkField(true);
+            });
+        });
+        if(typeof jQuery !== 'undefined'){
+            jQuery(document.body).on('checkout_error', function(){
+                if(!field) return;
+                var val = field.value.trim();
+                if(val.length > 0 && !/\d/.test(val)){
+                    document.querySelectorAll('.woocommerce-error li').forEach(function(li){
+                        if(/numer domu/i.test(li.textContent)) li.style.display = 'none';
+                    });
+                    var errorList = document.querySelector('.woocommerce-error');
+                    if(errorList){
+                        var visible = Array.from(errorList.querySelectorAll('li')).filter(function(li){ return li.style.display !== 'none'; });
+                        if(visible.length === 0) errorList.style.display = 'none';
+                    }
+                    setTimeout(function(){ jQuery('html, body').stop(true); setError(true); }, 50);
+                }
+            });
+        }
+    })();
+
+    /* 🛒 Setup checkout boxów + reorder */
     jQuery(function ($) {
         function setupCheckoutBoxes() {
             var table = $('.woocommerce-checkout-review-order-table');
@@ -1337,13 +1122,13 @@ add_action('wp_footer', function () {
         }
 
         mobileReorder();
-        $('form.checkout').addClass('hoopsy-ready');
 
         var savedScroll = null;
         $(document.body).on('update_checkout', function () { savedScroll = window.pageYOffset; });
         $(document.body).on('updated_checkout', function () {
             setupCheckoutBoxes();
             mobileReorder();
+            addShippingDescriptions();
             if (savedScroll !== null) { window.scrollTo(0, savedScroll); savedScroll = null; }
         });
 
@@ -1352,45 +1137,25 @@ add_action('wp_footer', function () {
             if (window.innerWidth > 768) { if (currentLayout === 'mobile') desktopReorder(); return; }
             if (currentLayout === 'mobile') return;
             currentLayout = 'mobile';
+            // Swap kolumn col-1/col-2 → obsługiwany przez CSS order (nie JS)
+            // JS tylko przenosi payment do #customer_details (cross-container)
             var customerDetails = $('#customer_details');
             var col1 = customerDetails.children('.col-1');
-            var col2 = customerDetails.children('.col-2');
-            if (!col1.length || !col2.length) return;
-            col1.css({ float: 'none', width: '100%' });
-            col2.css({ float: 'none', width: '100%' });
-            col2.insertBefore(col1);
-            var orderReview = $('#order_review');
-            var deliveryHeader = orderReview.find('.hoopsy-delivery-header-el');
-            var productsTable = orderReview.find('.woocommerce-checkout-review-order-table');
-            var productsBox = orderReview.find('.hoopsy-products-box');
-            orderReview.prepend(productsBox);
-            orderReview.prepend(productsTable);
-            orderReview.prepend(deliveryHeader);
+            if (!col1.length) return;
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
-            col1.after(payment);
-            col1.after(paymentHeader);
+            customerDetails.append(paymentHeader);
+            customerDetails.append(payment);
         }
 
         function desktopReorder() {
             currentLayout = 'desktop';
-            var customerDetails = $('#customer_details');
-            var col1 = customerDetails.children('.col-1');
-            var col2 = customerDetails.children('.col-2');
-            if (!col1.length || !col2.length) return;
-            col1.css({ float: '', width: '' });
-            col2.css({ float: '', width: '' });
-            col1.insertBefore(col2);
+            // Zwrot payment do #order_review
             var orderReview = $('#order_review');
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
             orderReview.append(paymentHeader);
             orderReview.append(payment);
-            var deliveryHeader = orderReview.find('.hoopsy-delivery-header-el');
-            var productsTable = orderReview.find('.woocommerce-checkout-review-order-table');
-            var productsBox = orderReview.find('.hoopsy-products-box');
-            productsTable.before(deliveryHeader);
-            productsTable.after(productsBox);
         }
 
         $(window).on('resize', function () { mobileReorder(); });
