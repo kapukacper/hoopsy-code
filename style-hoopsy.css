@@ -187,6 +187,14 @@
 #select-point {
   color: white;
   font-weight: 700;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Force button container to break to new line */
+li:has(#select-point-container) {
+  display: block !important;
 }
 
 #selected-point {
@@ -304,7 +312,7 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
 }
 
 .woocommerce-shipping-totals {
-  padding-bottom: 20px;
+  padding-bottom: 0 !important;
 }
 
 .woocommerce-form-coupon-toggle {
@@ -1097,7 +1105,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals td {
 .woocommerce-checkout #payment ul.payment_methods label {
   color: #555 !important;
   font-weight: 600 !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 
 /* ===================== HOOPSY CHECKOUT BOXY: PRODUKTY + DOSTAWA ===================== */
