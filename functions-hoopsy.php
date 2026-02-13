@@ -34,7 +34,6 @@ function hoopsy_checkout_dequeue() {
 
     // CSS – zbędne na kasie
     wp_dequeue_style('dashicons');
-    wp_dequeue_style('admin-bar');
     wp_dequeue_style('owl.carousel');
     wp_dequeue_style('owl.theme.default');
     wp_dequeue_style('contact-form-7');
@@ -48,7 +47,6 @@ function hoopsy_checkout_dequeue() {
     wp_dequeue_script('owl.carousel');
     wp_dequeue_script('hoverintent-js');
     wp_dequeue_script('hoverintent');
-    wp_dequeue_script('admin-bar');
     wp_dequeue_script('contact-form-7');
     wp_dequeue_script('swv');
     wp_dequeue_script('jquery-easing');
