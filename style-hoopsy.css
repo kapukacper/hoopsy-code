@@ -1,11 +1,21 @@
 /* ============================================================ */
+/* ZMIENNE KOLORYSTYCZNE HOOPSY                                  */
+/* ============================================================ */
+:root {
+  --hoopsy-brand: #f84077;
+  --hoopsy-brand-dark: #d63568;
+  --hoopsy-accent: #f1568d;
+  --hoopsy-success: #1ec13a;
+}
+
+/* ============================================================ */
 /* CZĘŚĆ 1: NOWE STYLE OPISU PRODUKTU (Ebook, Wideo, Bullety)   */
 /* ============================================================ */
 
 /* --- A. STYLIZACJA RAMKI EBOOKA (GRATIS) --- */
 .hoopsy-gratis-box {
   background-color: #fff5f8;
-  border: 2px dashed #f84077;
+  border: 2px dashed var(--hoopsy-brand);
   border-radius: 12px;
   padding: 15px;
   margin-top: 20px;
@@ -16,7 +26,7 @@
 
 /* Nagłówek: Różowy start */
 .hoopsy-gratis-header {
-  color: #f84077;
+  color: var(--hoopsy-brand);
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -74,7 +84,7 @@
 
 .hoopsy-summary {
   cursor: pointer;
-  color: #f84077;
+  color: var(--hoopsy-brand);
   font-weight: 600;
   font-size: 13px;
   list-style: none;
@@ -318,10 +328,6 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
   padding-bottom: 0 !important;
 }
 
-.woocommerce-form-coupon-toggle {
-  display: none;
-}
-
 .woocommerce ul#shipping_method li {
   margin-top: 10px;
 }
@@ -329,10 +335,6 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
 .order-total {
   padding-top: 20px;
   border-top: 1px solid #ededed;
-}
-
-.woocommerce-checkout #payment ul.payment_methods {
-  font-size: 16px;
 }
 
 .pbl-container .payu-list-banks {
@@ -359,6 +361,10 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
   body .container,
   body div.slider-nav {
     max-width: 90% !important;
+  }
+
+  body.single-product .container {
+    max-width: calc(90% + 8px) !important;
   }
 
   .woocommerce div.product div.summary {
@@ -450,7 +456,7 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 3px solid #f1568d;
+  border: 3px solid var(--hoopsy-accent);
   border-radius: 10px;
   padding: 10px;
   text-align: center;
@@ -464,8 +470,7 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
 
 .custom-product-subtitle span {
   font-size: 15px;
-  font-weight: normal;
-  font-style: bold;
+  font-weight: bold;
   color: #000000;
   line-height: 1.2;
 }
@@ -483,12 +488,12 @@ div.product .woocommerce-tabs .full-width-content[data-tab-style*=fullwidth] ul.
 
 /* DropNinja RocketBundles */
 .woocommerce div.product #DropNinja_Bundles_Product .offer {
-  border: 2px solid #f1568d !important;
+  border: 2px solid var(--hoopsy-accent) !important;
 }
 
 .woocommerce div.product #DropNinja_Bundles_Product .offer .radio input[type=radio],
 .woocommerce div.product #DropNinja_Bundles_Product .offer .radio input[type=checkbox] {
-  accent-color: #f1568d !important;
+  accent-color: var(--hoopsy-accent) !important;
 }
 
 /* ===================== UPSell ≈ RocketBundle (scalone) ===================== */
@@ -520,11 +525,11 @@ tr.wcqcs-cross-sell-item {
 }
 
 tr.wcqcs-cross-sell-item:hover {
-  border-color: #f1568d !important;
+  border-color: var(--hoopsy-accent) !important;
 }
 
 tr.wcqcs-cross-sell-item.checked {
-  border-color: #f1568d !important;
+  border-color: var(--hoopsy-accent) !important;
   background: #fff !important;
 }
 
@@ -555,7 +560,7 @@ tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"] {
 
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:hover,
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:hover {
-  border-color: #f1568d !important;
+  border-color: var(--hoopsy-accent) !important;
 }
 
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]::before,
@@ -571,12 +576,12 @@ tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]::before {
 
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:checked,
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:checked {
-  border-color: #f1568d !important;
+  border-color: var(--hoopsy-accent) !important;
 }
 
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="checkbox"]:checked::before,
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-cb input[type="radio"]:checked::before {
-  background: #f1568d !important;
+  background: var(--hoopsy-accent) !important;
 }
 
 tr.wcqcs-cross-sell-item .wcqcs-cross-sell-item-product {
@@ -641,12 +646,12 @@ h2.wcqcs-cross-sells-title,
   display: none !important;
 }
 
-/* 💳 CTA – różowy przycisk kasy */
+/* CTA - rozowy przycisk kasy */
 #place_order {
   animation: pulse-pink 2s ease infinite;
   position: relative;
   z-index: 1;
-  background: #f84077 !important;
+  background: var(--hoopsy-brand) !important;
   color: #ffffff !important;
   border: none !important;
   width: calc(100% - 20px) !important;
@@ -716,15 +721,15 @@ h2.wcqcs-cross-sells-title,
 
 @keyframes pulse-soft {
   0% {
-    box-shadow: 0 0 0 0 rgba(233, 16, 143, 0.45);
+    box-shadow: 0 0 0 0 rgba(248, 64, 119, 0.45);
   }
 
   70% {
-    box-shadow: 0 0 0 12px rgba(233, 16, 143, 0);
+    box-shadow: 0 0 0 12px rgba(248, 64, 119, 0);
   }
 
   100% {
-    box-shadow: 0 0 0 0 rgba(233, 16, 143, 0);
+    box-shadow: 0 0 0 0 rgba(248, 64, 119, 0);
   }
 }
 
@@ -734,7 +739,7 @@ h2.wcqcs-cross-sells-title,
   z-index: 1;
 }
 
-/* ===================== CUSTOM RATING HooPsy ===================== */
+/* ===================== CUSTOM RATING HOOPSY ===================== */
 .woocommerce-product-rating {
   display: none !important;
 }
@@ -794,96 +799,78 @@ h2.wcqcs-cross-sells-title,
   display: none !important;
 }
 /* ===================== FAQ ACCORDION ===================== */
-.hoopsy-faq-section {
-  margin: 12px 0 8px 0;
-  width: 100% !important;
-  max-width: 100% !important;
+.hoopsy-faq-wrapper {
+  margin: -1px 0 0 0;
+  width: 100%;
+  background: var(--hoopsy-brand);
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
-.hoopsy-faq-header {
-  font-size: 13px;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 6px 0;
-  padding: 0;
-  text-align: left;
+.hoopsy-faq-title {
+  padding: 2px 4px 10px 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
   white-space: nowrap;
+  text-align: center;
 }
 
 .hoopsy-faq-item {
-  border: none !important;
-  border-radius: 12px !important;
-  margin: 0 0 9px 0 !important;
-  padding: 0 !important;
-  background: #fff !important;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  margin: 0 0 9px 0;
   overflow: hidden;
-  box-shadow: none !important;
+  box-shadow: none;
 }
-
 .hoopsy-faq-item:last-child {
-  border-bottom: none !important;
+  margin-bottom: 0;
 }
 
-.hoopsy-faq-question {
+.hoopsy-faq-item summary {
   cursor: pointer;
-  padding: 5px 20px 5px 0;
+  padding: 7px 30px 7px 12px;
   font-size: 13px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 500;
+  color: #555;
   list-style: none;
   position: relative;
-  transition: color 0.2s ease;
-  background: transparent;
   white-space: nowrap;
 }
 
-.hoopsy-faq-question::-webkit-details-marker {
-  display: none;
-}
-
-.hoopsy-faq-question::after {
-  content: "▼";
+.hoopsy-faq-arrow {
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.8em;
-  color: #f84077;
-  transition: transform 0.2s ease;
+  color: var(--hoopsy-brand);
 }
 
-.hoopsy-faq-item[open] .hoopsy-faq-question::after {
-  transform: translateY(-50%) rotate(180deg);
-}
-
-.hoopsy-faq-item[open] .hoopsy-faq-question {
-  color: #f84077;
+.hoopsy-faq-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hoopsy-success);
+  margin-right: 6px;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .hoopsy-faq-answer {
-  padding: 2px 0 6px 0;
-  font-size: 12px;
+  padding: 0 12px 8px 12px;
+  font-size: 13px;
   line-height: 1.5;
-  color: #555;
+  color: #777;
 }
 
 .hoopsy-faq-answer p {
   margin: 0;
-}
-
-@media (max-width: 768px) {
-  .hoopsy-faq-header {
-    font-size: 12px;
-  }
-
-  .hoopsy-faq-question {
-    font-size: 12px;
-  }
-
-  .hoopsy-faq-answer {
-    font-size: 11px;
-  }
 }
 
 /* ===================== HOOPSY CHECKOUT - ELEMENT 1: DANE ROZLICZENIOWE ===================== */
@@ -907,7 +894,7 @@ h2.wcqcs-cross-sells-title,
 
 /* Nagłówek - różowy gradient */
 .woocommerce-billing-fields h3 {
-  background: linear-gradient(135deg, #f84077 0%, #d63568 100%) !important;
+  background: linear-gradient(135deg, var(--hoopsy-brand) 0%, var(--hoopsy-brand-dark) 100%) !important;
   color: #ffffff !important;
   font-size: 16px !important;
   font-weight: 800 !important;
@@ -986,7 +973,7 @@ h2.wcqcs-cross-sells-title,
 .woocommerce-billing-fields .form-row input:focus,
 .woocommerce-billing-fields .form-row select:focus,
 .woocommerce-billing-fields .form-row textarea:focus {
-  border-color: #f84077;
+  border-color: var(--hoopsy-brand);
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(248, 64, 119, 0.1);
   outline: none;
@@ -1138,7 +1125,7 @@ h3#order_review_heading {
 
 /* Wspólny nagłówek boxów – różowy gradient */
 .hoopsy-box-header {
-  background: linear-gradient(135deg, #f84077 0%, #d63568 100%) !important;
+  background: linear-gradient(135deg, var(--hoopsy-brand) 0%, var(--hoopsy-brand-dark) 100%) !important;
   color: #ffffff !important;
   padding: 14px 20px !important;
   font-size: 16px !important;
@@ -1234,6 +1221,8 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   width: 100% !important;
   display: table !important;
   margin-top: 0 !important;
+  padding: 5px 0 !important;
+  overflow: hidden !important;
 }
 
 /* Ukryj thead */
@@ -1308,7 +1297,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     min-width: 26px;
     border-radius: 50%;
     background: #ffffff;
-    color: #f84077;
+    color: var(--hoopsy-brand);
     font-size: 14px;
     font-weight: 800;
     margin-right: 10px;
@@ -1403,10 +1392,6 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 .woocommerce-checkout-review-order-table table.order-review {
   display: none !important;
 }
-.woocommerce-checkout-review-order-table {
-  padding: 5px 0 !important;
-  overflow: hidden !important;
-}
 .woocommerce-checkout-review-order-table .product-container {
   padding: 15px 20px 20px 20px !important;
   margin: 0 !important;
@@ -1486,7 +1471,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 }
 
 /* ============================================================ */
-/* CZĘŚĆ 5: GLOBALNE STYLE (KOSZYK / OBRAZKI / PASKI)           */
+/* CZĘŚĆ 3: GLOBALNE STYLE (KOSZYK / OBRAZKI / PASKI)           */
 /* (przeniesione z inline wp_head → plik CSS = cache)           */
 /* ============================================================ */
 
@@ -1544,11 +1529,27 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 }
 
 /* --- wspólny styl paska wysyłki/zaufania --- */
+.pasek-zaufania-salient {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #333;
+    text-align: left;
+}
+
+.pasek-zaufania-salient--atc {
+    margin: 20px 0;
+}
+
+.pasek-zaufania-salient--shipping {
+    margin: 0 0 6px 0;
+}
+
 .pasek-zaufania-salient .pasek-wysylka-dot {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: #1ec13a;
+    background: var(--hoopsy-success);
     box-shadow: 0 0 0 0 rgba(30, 193, 58, .7);
     animation: pasek-dot-blink 1.4s infinite ease-out;
     flex: 0 0 9px;
@@ -1604,12 +1605,21 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     justify-content: center;
 }
 
+.pasek-zaufania-salient .pasek-zaufania:not(.pasek-zaufania-wysylka) .pasek-zaufania-icon img {
+    width: 23px;
+    height: 23px;
+}
+
 .pasek-zaufania-salient .pasek-zaufania-text {
     flex: 1 1 auto;
     line-height: 1.3;
     white-space: normal;
 }
 
+.pasek-zaufania-salient .pasek-zaufania-wysylka {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
 .pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child { gap: 4px; }
 .pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child .pasek-zaufania-text { white-space: nowrap; }
 
@@ -1715,4 +1725,315 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     border-radius: 8px;
     margin-top: 6px;
     display: none;
+}
+
+/* --- zgoda prawna na checkout (legal consent) --- */
+#hoopsy-legal-consent {
+    margin-top: 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #777;
+}
+
+#hoopsy-payment-note {
+    display: none;
+}
+
+/* ============================================================ */
+/* CZĘŚĆ 4: STICKY ADD-TO-CART (przeniesione z inline PHP)       */
+/* ============================================================ */
+.kc-sticky-atc { display: none; }
+
+@media (max-width: 768px) {
+    :root { --kc-sticky-h: 66px; }
+
+    body.kc-sticky-atc-on {
+        padding-bottom: calc(var(--kc-sticky-h) + 16px + env(safe-area-inset-bottom)) !important;
+    }
+
+    .kc-sticky-atc {
+        display: block;
+        position: fixed;
+        left: 10px; right: 10px; bottom: 10px;
+        z-index: 999999;
+        transform: translateY(120%);
+        opacity: 0;
+        transition: transform .22s ease, opacity .22s ease;
+        pointer-events: none;
+    }
+    .kc-sticky-atc.is-visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .kc-sticky-atc__inner {
+        width: 100%;
+        max-width: 560px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        background: rgba(255,255,255,.98);
+        border: 1px solid rgba(0,0,0,.10);
+        box-shadow: 0 12px 26px rgba(0,0,0,.16);
+        border-radius: 14px;
+        padding: 10px;
+        backdrop-filter: blur(10px);
+        min-height: var(--kc-sticky-h);
+        box-sizing: border-box;
+    }
+
+    .kc-sticky-atc__left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .kc-sticky-atc__line1 {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: nowrap;
+        min-width: 0;
+    }
+
+    .kc-sticky-atc__price {
+        font-size: 14px;
+        line-height: 1.1;
+        color: rgba(0,0,0,.85);
+        white-space: nowrap;
+    }
+    .kc-sticky-atc__price del,
+    .kc-sticky-atc__price ins {
+        display: inline !important;
+        white-space: nowrap !important;
+    }
+    .kc-sticky-atc__price ins { text-decoration: none !important; }
+    .kc-sticky-atc__price ins .amount,
+    .kc-sticky-atc__price ins bdi {
+        color: #2e7d32 !important;
+        font-weight: 800 !important;
+    }
+
+    .kc-sticky-atc__line2 {
+        font-size: 13px;
+        line-height: 1.1;
+        color: rgba(0,0,0,.68);
+        white-space: nowrap;
+        overflow: visible;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding-left: 4px;
+    }
+    .kc-sticky-atc__line2 > span:last-child {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .kc-sticky-atc__line2 strong {
+        color: rgba(0,0,0,.86);
+        font-weight: 900;
+    }
+
+    .kc-sticky-atc .pasek-wysylka-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--hoopsy-success);
+        box-shadow: 0 0 0 0 rgba(30,193,58,.7);
+        animation: kc-sticky-dot-blink 1.4s infinite ease-out;
+        flex: 0 0 9px;
+        display: inline-block;
+    }
+
+    @keyframes kc-sticky-dot-blink {
+        0%   { box-shadow: 0 0 0 0 rgba(30,193,58,.7); opacity: 1; }
+        60%  { box-shadow: 0 0 0 8px rgba(30,193,58,0); opacity: .5; }
+        100% { box-shadow: 0 0 0 0 rgba(30,193,58,0); opacity: 1; }
+    }
+
+    .kc-sticky-atc__right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 0 0 44%;
+        min-width: 170px;
+    }
+
+    .kc-sticky-atc__btn {
+        height: 38px !important;
+        width: 100%;
+        min-width: 170px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 14px !important;
+        border-radius: 12px;
+        border: 0 !important;
+        cursor: pointer;
+        text-decoration: none !important;
+        background: var(--hoopsy-brand) !important;
+        color: #fff !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,.14);
+        white-space: nowrap;
+    }
+
+    @media (max-width: 390px) {
+        :root { --kc-sticky-h: 64px; }
+        .kc-sticky-atc__price { font-size: 13px; }
+        .kc-sticky-atc__line2 { font-size: 12px; }
+    }
+
+    .kc-sticky-highlight {
+        outline: 3px solid rgba(248,64,119,.28);
+        outline-offset: 6px;
+        border-radius: 12px;
+        transition: outline .2s ease;
+    }
+}
+
+/* ============================================================ */
+/* CZĘŚĆ 5: HURRYSTOCK BADGE (przeniesione z inline PHP)         */
+/* ============================================================ */
+body.single-product .summary.entry-summary .dn-price-hs--standalone { display: none; }
+
+body.single-product .summary.entry-summary p.price.dn-price-hs-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+body.single-product .summary.entry-summary p.price.dn-price-hs-row del,
+body.single-product .summary.entry-summary p.price.dn-price-hs-row ins {
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+}
+
+body.single-product .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs {
+    margin-left: 0 !important;
+    display: inline-flex !important;
+    align-self: center !important;
+    vertical-align: middle !important;
+    position: relative;
+    top: 0 !important;
+    overflow: visible;
+}
+
+.dn-hurrystock-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #f4a5a5;
+    color: #fff;
+    border-radius: 12px;
+    padding: 7px 14px;
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+    position: relative;
+    overflow: visible;
+}
+
+.dn-hurrystock-label,
+.dn-hurrystock-suffix { opacity: .95; }
+
+.dn-hurrystock-num { font-weight: 700; text-align: left; }
+
+@keyframes dnIconPulse {
+    0%   { opacity: 1;   transform: translateY(-50%) rotate(-10deg) scale(1); }
+    50%  { opacity: .70; transform: translateY(-50%) rotate(-10deg) scale(1.04); }
+    100% { opacity: 1;   transform: translateY(-50%) rotate(-10deg) scale(1); }
+}
+
+.dn-hurrystock-inline.dn-hurrystock-sale::after {
+    content: "";
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    width: 29px;
+    height: 29px;
+    transform: translateY(-50%) rotate(-10deg);
+    transform-origin: 50% 50%;
+    background-image: url('https://medicane.pl/wp-content/uploads/2026/01/discount_10703149.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.15));
+    animation: dnIconPulse 2.2s ease-in-out infinite;
+}
+
+.dn-mini-loader { display: inline-block; width: 18px; height: 1em; vertical-align: baseline; position: relative; }
+.dn-mini-loader::before { content: "..."; letter-spacing: 2px; opacity: .85; animation: dnDots 1s infinite steps(4,end); }
+
+@keyframes dnDots {
+    0%   { content: ""; opacity: .55; }
+    25%  { content: "."; opacity: .70; }
+    50%  { content: ".."; opacity: .85; }
+    75%  { content: "..."; opacity: 1; }
+    100% { content: ""; opacity: .55; }
+}
+
+@media (max-width: 480px) {
+    body.single-product .summary.entry-summary p.price.dn-price-hs-row { gap: 8px; }
+
+    .dn-hurrystock-inline {
+        font-size: 14px;
+        padding: 8px 12px;
+        gap: 2px;
+        border-radius: 8px;
+    }
+
+    .dn-hurrystock-inline.dn-hurrystock-sale::after {
+        right: -20px;
+        width: 27px;
+        height: 27px;
+    }
+}
+
+@media (max-width: 360px) {
+    .dn-hurrystock-inline {
+        font-size: 12px;
+        padding: 7px 10px;
+        gap: 2px;
+    }
+
+    .dn-hurrystock-inline.dn-hurrystock-sale::after {
+        width: 25px;
+        height: 25px;
+        right: -18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dn-hurrystock-inline.dn-hurrystock-sale::after {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* ============================================================ */
+/* CZĘŚĆ 6: FAQ ACCORDION RESPONSIVE (przeniesione z inline PHP) */
+/* ============================================================ */
+.hoopsy-faq-item summary::-webkit-details-marker { display: none; }
+.hoopsy-faq-item summary::marker { display: none; content: ""; }
+
+@media (max-width: 480px) {
+    .hoopsy-faq-title { font-size: min(15px, 3.8vw) !important; }
+}
+@media (min-width: 999px) {
+    .hoopsy-faq-title { font-size: 16px !important; font-weight: 600 !important; padding-bottom: 14px !important; }
 }
