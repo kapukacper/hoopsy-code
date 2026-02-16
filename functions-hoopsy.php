@@ -91,6 +91,48 @@ function hoopsy_get_shipping_meta(int $product_id = 0): array {
     ];
 }
 
+/**
+ * Łączna kwota rabatu w koszyku (sale items).
+ */
+function hoopsy_get_cart_discount(): array {
+    if (!WC()->cart) return ['amount' => 0, 'pct' => 0];
+
+    $total_regular = 0;
+    $discount      = 0;
+
+    foreach (WC()->cart->get_cart() as $item) {
+        $product = $item['data'];
+        $qty     = $item['quantity'];
+        if ($product->is_on_sale()) {
+            $reg = (float) $product->get_regular_price() * $qty;
+            $total_regular += $reg;
+            $discount += $reg - ((float) $product->get_price() * $qty);
+        }
+    }
+
+    $pct = $total_regular > 0 ? round(($discount / $total_regular) * 100) : 0;
+    return ['amount' => $discount, 'pct' => $pct];
+}
+
+// ====== RABAT W CHECKOUT (fragment, odświeża się z update_checkout) ======
+add_action('woocommerce_before_checkout_form', 'hoopsy_discount_holder_html');
+function hoopsy_discount_holder_html(): void {
+    $d = hoopsy_get_cart_discount();
+    echo '<div class="hoopsy-discount-holder" style="display:none"'
+        . ' data-amount="' . esc_attr(number_format($d['amount'], 2, '.', '')) . '"'
+        . ' data-pct="' . esc_attr($d['pct']) . '"></div>';
+}
+
+add_filter('woocommerce_update_order_review_fragments', 'hoopsy_discount_fragment');
+function hoopsy_discount_fragment(array $fragments): array {
+    $d = hoopsy_get_cart_discount();
+    $fragments['.hoopsy-discount-holder'] =
+        '<div class="hoopsy-discount-holder" style="display:none"'
+        . ' data-amount="' . esc_attr(number_format($d['amount'], 2, '.', '')) . '"'
+        . ' data-pct="' . esc_attr($d['pct']) . '"></div>';
+    return $fragments;
+}
+
 // ====== WYŁĄCZ OBLICZENIA WYSYŁKI NA KOSZYKU ======
 add_filter('woocommerce_cart_ready_to_calc_shipping', 'hoopsy_cart_hide_shipping', 99);
 function hoopsy_cart_hide_shipping(bool $show_shipping): bool {
@@ -853,10 +895,29 @@ function hoopsy_checkout_js(): void {
             productsTable.append(tbody.detach());
             productsBox.append(productsTable);
 
-            var deliveryHeader = $('<div class="hoopsy-delivery-header-el hoopsy-box-header"><span class="hoopsy-step-num">1</span> KOSZYK Z PRODUKTAMI</div>');
+            var deliveryHeader = $('<div class="hoopsy-delivery-header-el hoopsy-box-header"><span class="hoopsy-step-num">1</span> KOSZYK <span class="hoopsy-header-timer">(REZERWACJA <span class="hoopsy-timer-value">9:59</span>)</span></div>');
             table.before(deliveryHeader);
             table.after(productsBox);
             table.find('thead').hide();
+
+            // Kreska + rabat pod produktami w KOSZYK
+            table.find('.hoopsy-cart-divider').remove();
+            var lastContainer = table.find('.product-container:last');
+            if (lastContainer.length) {
+                lastContainer.css('padding-bottom', '0');
+                var divider = $('<div class="hoopsy-cart-divider"></div>');
+                lastContainer.append(divider);
+
+                var discountHolder = $('.hoopsy-discount-holder');
+                if (discountHolder.length) {
+                    var amt = parseFloat(discountHolder.attr('data-amount'));
+                    var pct = parseInt(discountHolder.attr('data-pct'), 10);
+                    if (amt > 0) {
+                        var formatted = new Intl.NumberFormat('pl-PL', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(amt);
+                        divider.append('<div class="hoopsy-discount-text"><span class="hoopsy-discount-label"><span class="hoopsy-discount-dot"></span>Aktywna promocja:</span><span class="hoopsy-discount-value">-' + formatted + '\u00A0zł (-' + pct + '%)</span></div>');
+                    }
+                }
+            }
 
             var payment = $('#payment');
             if (payment.length && !payment.prev('.hoopsy-payment-header').length) {
@@ -906,6 +967,16 @@ function hoopsy_checkout_js(): void {
         }
 
         $(window).on('resize', function () { mobileReorder(); });
+
+        // Timer rezerwacji w nagłówku (10 min, po 0 resetuje cicho)
+        var hoopsyTimerSeconds = 599;
+        setInterval(function () {
+            hoopsyTimerSeconds--;
+            if (hoopsyTimerSeconds <= 0) hoopsyTimerSeconds = 599;
+            var m = Math.floor(hoopsyTimerSeconds / 60);
+            var s = hoopsyTimerSeconds % 60;
+            $('.hoopsy-timer-value').text(m + ':' + (s < 10 ? '0' : '') + s);
+        }, 1000);
 
         $(document).on('click', '.hoopsy-qty-btn', function () {
             var wrap = $(this).closest('.hoopsy-qty-wrap');

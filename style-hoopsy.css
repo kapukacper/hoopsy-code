@@ -1400,6 +1400,49 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
+/* Kreska pod produktami w KOSZYK */
+.hoopsy-cart-divider {
+  border-top: 2px solid #e0e0e0;
+  margin-top: 14px !important;
+}
+.hoopsy-discount-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0 0 0 !important;
+  margin-bottom: -8px !important;
+}
+.hoopsy-discount-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+}
+.hoopsy-discount-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #32b632;
+  display: inline-block;
+  flex-shrink: 0;
+  animation: hoopsy-pulse 1.5s ease-in-out infinite;
+}
+@keyframes hoopsy-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(50, 182, 50, 0.6); }
+  50% { box-shadow: 0 0 0 5px rgba(50, 182, 50, 0); }
+}
+.hoopsy-discount-value {
+  color: #32b632;
+  font-size: 13px;
+  font-weight: 700;
+}
+.hoopsy-header-timer {
+  font-weight: 400;
+  opacity: 0.8;
+  margin-left: 4px;
+}
 
 /* ===================== MOBILE: REORDER CHECKOUT ===================== */
 /* CSS order zamiast JS reorder → brak flasha (opacity:0 usunięte) */
