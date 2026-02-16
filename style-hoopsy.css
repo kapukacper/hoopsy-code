@@ -1148,6 +1148,48 @@ h3#order_review_heading {
   margin-bottom: 24px !important;
 }
 
+/* === BOX ZWROTÓW === */
+.hoopsy-returns-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  background: #ffffff !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  padding: 13px 20px !important;
+  margin-bottom: 24px !important;
+  box-sizing: border-box !important;
+}
+.hoopsy-returns-icon {
+  width: auto !important;
+  height: 22px !important;
+  flex-shrink: 0 !important;
+  margin-left: -4px !important;
+}
+.hoopsy-returns-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin-left: -3px !important;
+}
+.hoopsy-returns-title {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #333 !important;
+  letter-spacing: 0.5px !important;
+}
+.hoopsy-returns-desc {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #777 !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+.hoopsy-returns-desc strong {
+  font-weight: 550 !important;
+}
+
 .hoopsy-box-table {
   background: #ffffff !important;
   border: 2px solid #e0e0e0 !important;
@@ -1468,6 +1510,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   /* Boxy szersze o 6px z każdej strony */
   .hoopsy-box-table,
   .hoopsy-box-header,
+  .hoopsy-returns-box,
   .woocommerce-checkout-review-order-table,
   .woocommerce-billing-fields,
   #payment {
@@ -1475,6 +1518,10 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     margin-right: -6px !important;
     box-sizing: border-box !important;
     width: calc(100% + 12px) !important;
+  }
+  .hoopsy-returns-box {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
   /* Billing header wewnątrz boxa */
   .woocommerce-billing-fields h3 {
@@ -1573,11 +1620,13 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 
 /* --- wspólny styl paska wysyłki/zaufania --- */
 .pasek-zaufania-salient {
+    background: #fff;
+    font-size: 13px;
+    color: #555;
+    text-align: center;
     width: 100%;
     box-sizing: border-box;
-    font-size: 13px;
-    color: #333;
-    text-align: left;
+    display: block;
 }
 
 .pasek-zaufania-salient--atc {
@@ -1620,6 +1669,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 .pasek-zaufania-salient .pasek-flag-pl-bottom { flex: 1; background: #d81b3f; }
 
 .pasek-zaufania-salient .pasek-zaufania {
+    margin-top: 8px;
     padding: 10px 14px;
     background: #f5f5f5;
     border-radius: 12px;
@@ -1627,10 +1677,10 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    box-sizing: border-box;
     text-align: left;
     font-size: 15px;
     font-weight: 500;
-    box-sizing: border-box;
 }
 
 .pasek-zaufania-salient .pasek-zaufania-item {
@@ -1651,6 +1701,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 .pasek-zaufania-salient .pasek-zaufania:not(.pasek-zaufania-wysylka) .pasek-zaufania-icon img {
     width: 23px;
     height: 23px;
+    object-fit: contain;
 }
 
 .pasek-zaufania-salient .pasek-zaufania-text {
@@ -1663,8 +1714,17 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     margin-top: 0;
     margin-bottom: 8px;
 }
-.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child { gap: 4px; }
-.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child .pasek-zaufania-text { white-space: nowrap; }
+.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item {
+    gap: 4px;
+}
+@media (max-width: 768px) {
+  .pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-item:first-child {
+    margin-left: -4px;
+  }
+}
+.pasek-zaufania-salient .pasek-zaufania-wysylka .pasek-zaufania-text {
+    white-space: nowrap;
+}
 
 .pasek-zaufania-salient .pasek-platnosci {
     display: flex;

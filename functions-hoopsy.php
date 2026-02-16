@@ -20,7 +20,7 @@ define('HOOPSY_LOGO_INPOST', 'https://inpost.pl/sites/default/files/2024-07/InPo
 define('HOOPSY_LOGO_WYGODNE_ZWROTY', 'https://wygodnezwroty.pl/next-img/logo/pl.svg');
 define('HOOPSY_LOGO_BLIK', 'https://www.blik.com/layout/default/dist/gfx/logo/logo.svg');
 define('HOOPSY_LOGO_P24', 'https://www.przelewy24.pl/themes/przelewy24/assets/img/base/przelewy24_logo_2022.svg');
-define('HOOPSY_ICON_VERIFIED', 'https://www.hoopsy.pl/wp-content/uploads/2025/11/success_4192775.svg');
+define('HOOPSY_ICON_VERIFIED', 'https://www.hoopsy.pl/wp-content/uploads/2026/02/orzel-bialy.webp');
 define('HOOPSY_ICON_LOCK', 'https://www.hoopsy.pl/wp-content/uploads/2025/11/lock_17002091.svg');
 define('HOOPSY_PROMO_IMAGE', 'https://www.hoopsy.pl/wp-content/uploads/2025/10/ZROB-SAM-OBRAZEK-CIOTO2.png');
 
@@ -899,6 +899,11 @@ function hoopsy_checkout_js(): void {
             table.before(deliveryHeader);
             table.after(productsBox);
             table.find('thead').hide();
+
+            // Box zwrotów pod DOSTAWA I PODSUMOWANIE
+            $('.hoopsy-returns-box').remove();
+            var returnsBox = $('<div class="hoopsy-returns-box"><img class="hoopsy-returns-icon" src="<?= esc_url(HOOPSY_LOGO_WYGODNE_ZWROTY) ?>" alt="Wygodne Zwroty"><div class="hoopsy-returns-text"><span class="hoopsy-returns-desc">Chcesz zwrócić zakupiony produkt?</span><span class="hoopsy-returns-desc"><strong>Masz 30 dni od otrzymania paczki.</strong></span></div></div>');
+            productsBox.after(returnsBox);
 
             // Kreska + rabat pod produktami w KOSZYK
             table.find('.hoopsy-cart-divider').remove();
