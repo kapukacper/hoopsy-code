@@ -22,6 +22,7 @@ define('HOOPSY_LOGO_BLIK', 'https://www.blik.com/layout/default/dist/gfx/logo/lo
 define('HOOPSY_LOGO_P24', 'https://www.przelewy24.pl/themes/przelewy24/assets/img/base/przelewy24_logo_2022.svg');
 define('HOOPSY_ICON_VERIFIED', 'https://www.hoopsy.pl/wp-content/uploads/2026/02/orzel-bialy.webp');
 define('HOOPSY_ICON_LOCK', 'https://www.hoopsy.pl/wp-content/uploads/2025/11/lock_17002091.svg');
+define('HOOPSY_ICON_CONTACT', 'https://www.hoopsy.pl/wp-content/uploads/2026/02/woman_11107554.png');
 define('HOOPSY_PROMO_IMAGE', 'https://www.hoopsy.pl/wp-content/uploads/2025/10/ZROB-SAM-OBRAZEK-CIOTO2.png');
 
 // ====== STYLE DZIECKA ======
@@ -928,6 +929,16 @@ function hoopsy_checkout_js(): void {
             if (payment.length && !payment.prev('.hoopsy-payment-header').length) {
                 payment.before('<div class="hoopsy-payment-header hoopsy-box-header"><span class="hoopsy-step-num">4</span> METODA PŁATNOŚCI</div>');
             }
+
+            // Box zaufania pod METODA PŁATNOŚCI
+            $('.hoopsy-trust-box').remove();
+            var trustBox = $('<div class="hoopsy-trust-box"><div class="hoopsy-trust-item"><img class="hoopsy-trust-icon" src="<?= esc_url(HOOPSY_ICON_VERIFIED) ?>" alt="Polska firma"><div class="hoopsy-trust-text"><strong>Polska firma</strong><br>NIP &amp; REGON</div></div><div class="hoopsy-trust-item"><img class="hoopsy-trust-icon" src="<?= esc_url(HOOPSY_ICON_LOCK) ?>" alt="Ochrona danych"><div class="hoopsy-trust-text"><strong>Ochrona danych</strong><br>i prywatności</div></div><div class="hoopsy-trust-item"><img class="hoopsy-trust-icon" src="<?= esc_url(HOOPSY_ICON_CONTACT) ?>" alt="Kontakt"><div class="hoopsy-trust-text"><strong>Infolinia:</strong> 698 732 875<br><strong>Mail:</strong> kontakt@hoopsy.pl</div></div></div>');
+            payment.after(trustBox);
+
+            // Box kontaktowy (tylko mobile) pod METODA PŁATNOŚCI
+            $('.hoopsy-contact-box').remove();
+            var contactBox = $('<div class="hoopsy-contact-box"><div class="hoopsy-trust-item"><img class="hoopsy-trust-icon hoopsy-contact-icon" src="<?= esc_url(HOOPSY_ICON_CONTACT) ?>" alt="Kontakt"><div class="hoopsy-trust-text"><strong>Kontakt telefoniczny:</strong> 698 732 875<br><strong>Napisz maila:</strong> kontakt@hoopsy.pl</div></div></div>');
+            trustBox.after(contactBox);
         }
 
         setupCheckoutBoxes();
@@ -958,8 +969,12 @@ function hoopsy_checkout_js(): void {
             if (!col1.length) return;
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
+            var trustBox = $('.hoopsy-trust-box');
+            var contactBox = $('.hoopsy-contact-box');
             customerDetails.append(paymentHeader);
             customerDetails.append(payment);
+            customerDetails.append(trustBox);
+            customerDetails.append(contactBox);
         }
 
         function desktopReorder() {
@@ -967,8 +982,12 @@ function hoopsy_checkout_js(): void {
             var orderReview = $('#order_review');
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
+            var trustBox = $('.hoopsy-trust-box');
+            var contactBox = $('.hoopsy-contact-box');
             orderReview.append(paymentHeader);
             orderReview.append(payment);
+            orderReview.append(trustBox);
+            orderReview.append(contactBox);
         }
 
         $(window).on('resize', function () { mobileReorder(); });

@@ -878,8 +878,9 @@ h2.wcqcs-cross-sells-title,
 /* Box container */
 .woocommerce-billing-fields {
   background: #ffffff !important;
-  border: none !important;
+  border: 2px solid #e0e0e0 !important;
   border-radius: 16px !important;
+  overflow: hidden !important;
   padding: 0 !important;
   margin-bottom: 24px !important;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
@@ -1188,6 +1189,50 @@ h3#order_review_heading {
 }
 .hoopsy-returns-desc strong {
   font-weight: 550 !important;
+}
+
+/* === BOX ZAUFANIA (pod płatnościami) === */
+.hoopsy-trust-box {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-around !important;
+  background: #ffffff !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  padding: 13px 20px !important;
+  margin-top: 0 !important;
+  margin-bottom: 24px !important;
+  box-sizing: border-box !important;
+}
+.hoopsy-trust-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.hoopsy-trust-icon {
+  height: 23px !important;
+  width: auto !important;
+  flex-shrink: 0 !important;
+}
+.hoopsy-trust-item:last-child .hoopsy-trust-icon {
+  height: 26px !important;
+}
+.hoopsy-trust-text {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #777 !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+}
+.hoopsy-trust-text strong {
+  font-weight: 600 !important;
+  color: #555 !important;
+}
+
+/* Contact box — tylko mobile */
+.hoopsy-contact-box {
+  display: none !important;
 }
 
 .hoopsy-box-table {
@@ -1505,12 +1550,31 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     order: 1 !important;
   }
   /* Payment przenoszone przez JS — niech ma odpowiedni order */
-  #customer_details .hoopsy-payment-header { order: 3 !important; }
-  #customer_details #payment { order: 4 !important; }
+  #customer_details .hoopsy-trust-box { order: 3 !important; }
+  #customer_details .hoopsy-payment-header { order: 4 !important; }
+  #customer_details #payment { order: 5 !important; }
+  #customer_details .hoopsy-contact-box {
+    order: 6 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #ffffff !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+    padding: 13px 20px !important;
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+  }
+  .hoopsy-contact-box .hoopsy-contact-icon {
+    height: 26px !important;
+  }
   /* Boxy szersze o 6px z każdej strony */
   .hoopsy-box-table,
   .hoopsy-box-header,
   .hoopsy-returns-box,
+  .hoopsy-trust-box,
+  .hoopsy-contact-box,
   .woocommerce-checkout-review-order-table,
   .woocommerce-billing-fields,
   #payment {
@@ -1519,9 +1583,14 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     box-sizing: border-box !important;
     width: calc(100% + 12px) !important;
   }
-  .hoopsy-returns-box {
+  .hoopsy-returns-box,
+  .hoopsy-trust-box,
+  .hoopsy-contact-box {
     padding-left: 12px !important;
     padding-right: 12px !important;
+  }
+  .hoopsy-trust-box .hoopsy-trust-item:last-child {
+    display: none !important;
   }
   /* Billing header wewnątrz boxa */
   .woocommerce-billing-fields h3 {
@@ -1699,9 +1768,9 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 }
 
 .pasek-zaufania-salient .pasek-zaufania:not(.pasek-zaufania-wysylka) .pasek-zaufania-icon img {
-    width: 23px;
+    display: block;
     height: 23px;
-    object-fit: contain;
+    width: auto;
 }
 
 .pasek-zaufania-salient .pasek-zaufania-text {
