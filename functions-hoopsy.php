@@ -416,6 +416,19 @@ function hoopsy_wysylka_box_only(): void
     <?php
 }
 
+// ====== SZARY BOX WOKÓŁ TYTUŁU, OCEN I CENY ======
+add_action('woocommerce_single_product_summary', 'hoopsy_product_box_open', 4);
+function hoopsy_product_box_open(): void {
+    if (!is_product()) return;
+    echo '<div class="hoopsy-product-info-box">';
+}
+
+add_action('woocommerce_single_product_summary', 'hoopsy_product_box_close', 11);
+function hoopsy_product_box_close(): void {
+    if (!is_product()) return;
+    echo '</div><!-- /.hoopsy-product-info-box -->';
+}
+
 // ====== WŁASNY BLOK OCEN ======
 add_action('after_setup_theme', 'hoopsy_setup_rating');
 function hoopsy_setup_rating(): void {
@@ -470,7 +483,7 @@ function hoopsy_hurrystock_shortcode(array|string $atts): string {
 
     ob_start();
     ?>
-    <span class="dn-hurrystock-inline dn-hurrystock-sale <?= esc_attr($class) ?>" data-dn-hurrystock-id="<?= $id ?>"><span class="dn-hurrystock-label"><?= esc_html($parsed['label']) ?></span><span class="dn-hurrystock-num"><span class="dn-mini-loader" aria-label="Wczytywanie"></span></span><span class="dn-hurrystock-suffix"><?= esc_html($parsed['suffix']) ?></span></span>
+    <span class="dn-hurrystock-inline dn-hurrystock-sale <?= esc_attr($class) ?>" data-dn-hurrystock-id="<?= $id ?>"><span class="dn-hurrystock-label"><?= esc_html($parsed['label']) ?></span><span class="dn-hurrystock-num">10</span><span class="dn-hurrystock-suffix"><?= esc_html($parsed['suffix']) ?></span></span>
     <?php
     return trim(ob_get_clean());
 }
@@ -903,7 +916,7 @@ function hoopsy_checkout_js(): void {
 
             // Box zwrotów pod DOSTAWA I PODSUMOWANIE
             $('.hoopsy-returns-box').remove();
-            var returnsBox = $('<div class="hoopsy-returns-box"><img class="hoopsy-returns-icon" src="<?= esc_url(HOOPSY_LOGO_WYGODNE_ZWROTY) ?>" alt="Wygodne Zwroty"><div class="hoopsy-returns-text"><span class="hoopsy-returns-desc">Chcesz zwrócić zakupiony produkt?</span><span class="hoopsy-returns-desc"><strong>Masz 30 dni od otrzymania paczki.</strong></span></div></div>');
+            var returnsBox = $('<div class="hoopsy-returns-box"><img class="hoopsy-returns-icon" src="<?= esc_url(HOOPSY_LOGO_WYGODNE_ZWROTY) ?>" alt="Wygodne Zwroty"><div class="hoopsy-returns-text"><span class="hoopsy-returns-desc">Zasady zwrotu w naszym sklepie?</span><span class="hoopsy-returns-desc"><strong>Masz 30 dni od otrzymania paczki.</strong></span></div></div>');
             productsBox.after(returnsBox);
 
             // Kreska + rabat pod produktami w KOSZYK
@@ -929,6 +942,10 @@ function hoopsy_checkout_js(): void {
             if (payment.length && !payment.prev('.hoopsy-payment-header').length) {
                 payment.before('<div class="hoopsy-payment-header hoopsy-box-header"><span class="hoopsy-step-num">4</span> METODA PŁATNOŚCI</div>');
             }
+
+            // Notatka BLIK wewnątrz payment_box (widoczna tylko gdy BLIK wybrany)
+            payment.find('.hoopsy-blik-note').remove();
+            payment.find('.payment_box.payment_method_payublik').prepend('<p class="hoopsy-blik-note">Po wpisaniu kodu BLIK - potwierdź płatność 📲</p>');
 
             // Box zaufania pod METODA PŁATNOŚCI
             $('.hoopsy-trust-box').remove();
