@@ -163,15 +163,24 @@ function hoopsy_disable_cod(array $available_gateways): array
     return $available_gateways;
 }
 
-// ====== WALIDACJA NUMERU DOMU W ADRESIE ======
-add_action('woocommerce_checkout_process', 'hoopsy_validate_address_number');
-function hoopsy_validate_address_number(): void
-{
-    $address = isset($_POST['billing_address_1']) ? sanitize_text_field($_POST['billing_address_1']) : '';
-    if ($address !== '' && !preg_match('/\d/', $address)) {
-        wc_add_notice('Podaj również numer domu/mieszkania w adresie.', 'error');
+// ====== WYŁĄCZENIE WALIDACJI FORMATU PÓL CHECKOUT ======
+add_filter('woocommerce_billing_fields', 'hoopsy_remove_field_validation', 999);
+function hoopsy_remove_field_validation(array $fields): array {
+    foreach ($fields as &$field) {
+        unset($field['validate']);
     }
+    if (isset($fields['billing_email'])) {
+        $fields['billing_email']['type'] = 'text';
+        $fields['billing_email']['required'] = false;
+    }
+    return $fields;
 }
+// Wyłącz is_email() tylko podczas składania zamówienia
+add_action('woocommerce_checkout_process', function() {
+    add_filter('is_email', function($result, $email) {
+        return !empty($email) ? $email : $result;
+    }, 9999, 2);
+}, 1);
 
 // ====== AUTOAKTUALIZACJA KOSZYKA PO ZMIANIE ILOŚCI ======
 add_action('wp_footer', 'hoopsy_cart_auto_update');
@@ -829,68 +838,6 @@ function hoopsy_checkout_js(): void {
       });
     }
     document.addEventListener('DOMContentLoaded', addShippingDescriptions);
-
-    /* Walidacja adresu (numer domu) */
-    (function(){
-        var field, warn, row;
-        function init(){
-            field = document.getElementById('billing_address_1');
-            if(!field) return;
-            row = document.getElementById('billing_address_1_field');
-            warn = document.createElement('div');
-            warn.className = 'hoopsy-addr-warning';
-            warn.textContent = 'Podaj również numer domu/mieszkania! (np. Przyjaźni 24/8)';
-            field.parentNode.appendChild(warn);
-            field.addEventListener('blur', function(){ checkField(false); });
-            field.addEventListener('input', function(){ if(/\d/.test(field.value)) clearError(); });
-        }
-        function setError(scroll){
-            field.classList.remove('hoopsy-addr-blink');
-            void field.offsetWidth;
-            field.classList.add('hoopsy-addr-blink', 'hoopsy-addr-error');
-            if(row) row.classList.add('hoopsy-row-error');
-            warn.style.display = 'block';
-            if(scroll){
-                var rect = field.getBoundingClientRect();
-                var scrollTo = window.pageYOffset + rect.top - (window.innerHeight / 2) + (rect.height / 2);
-                window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-            }
-        }
-        function clearError(){
-            field.classList.remove('hoopsy-addr-blink', 'hoopsy-addr-error');
-            if(row) row.classList.remove('hoopsy-row-error');
-            warn.style.display = 'none';
-        }
-        function checkField(scroll){
-            if(!field) return false;
-            var val = field.value.trim();
-            if(val.length > 0 && !/\d/.test(val)){ setError(scroll); return false; }
-            return true;
-        }
-        document.addEventListener('DOMContentLoaded', function(){
-            init();
-            document.addEventListener('click', function(e){
-                if(e.target && e.target.id === 'place_order') checkField(true);
-            });
-        });
-        if(typeof jQuery !== 'undefined'){
-            jQuery(document.body).on('checkout_error', function(){
-                if(!field) return;
-                var val = field.value.trim();
-                if(val.length > 0 && !/\d/.test(val)){
-                    document.querySelectorAll('.woocommerce-error li').forEach(function(li){
-                        if(/numer domu/i.test(li.textContent)) li.style.display = 'none';
-                    });
-                    var errorList = document.querySelector('.woocommerce-error');
-                    if(errorList){
-                        var visible = Array.from(errorList.querySelectorAll('li')).filter(function(li){ return li.style.display !== 'none'; });
-                        if(visible.length === 0) errorList.style.display = 'none';
-                    }
-                    setTimeout(function(){ jQuery('html, body').stop(true); setError(true); }, 50);
-                }
-            });
-        }
-    })();
 
     /* Setup checkout boxów + reorder */
     jQuery(function ($) {

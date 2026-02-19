@@ -1889,6 +1889,9 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     .dn-mobile-only, .mobile-only { display: none !important; }
 }
 
+/* --- ukrycie "(opcjonalne)" przy polu email --- */
+#billing_email_field .optional { display: none !important; }
+
 /* --- opis czasu dostawy pod metodami wysyłki --- */
 .shipping-method-description {
     font-size: 11px;
@@ -1910,37 +1913,6 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     padding: 7px 10px !important;
     border-radius: 5px !important;
     margin: 0 0 10px 0 !important;
-}
-
-/* --- walidacja adresu (brak numeru domu) --- */
-@keyframes hoopsy-blink-red {
-    0%, 100% { border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.25); }
-    50% { border-color: #ff8a80; box-shadow: 0 0 0 6px rgba(231,76,60,0.10); }
-}
-#billing_address_1.hoopsy-addr-error {
-    border-color: #e74c3c !important;
-    background-color: #fff5f5 !important;
-    box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
-}
-#billing_address_1.hoopsy-addr-blink {
-    animation: hoopsy-blink-red 0.6s ease 3 !important;
-    background-color: #fff5f5 !important;
-}
-#billing_address_1_field.hoopsy-row-error .select2-container,
-#billing_address_1_field.hoopsy-row-error input,
-#billing_address_1_field.woocommerce-validated.hoopsy-row-error input {
-    border-color: #e74c3c !important;
-    background-color: #fff5f5 !important;
-}
-.hoopsy-addr-warning {
-    background: #e74c3c;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 8px;
-    margin-top: 6px;
-    display: none;
 }
 
 /* --- zgoda prawna na checkout (legal consent) --- */
