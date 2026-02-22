@@ -148,6 +148,12 @@ function hoopsy_auto_accept_terms(array $data): array
     return $data;
 }
 
+// ====== TEKST PRZYCISKU ATC ======
+add_filter('woocommerce_product_single_add_to_cart_text', 'hoopsy_atc_text');
+function hoopsy_atc_text(): string {
+    return 'DODAJ DO KOSZYKA';
+}
+
 // ====== BLOKADA COD DLA KONKRETNEGO PRODUKTU ======
 add_filter('woocommerce_available_payment_gateways', 'hoopsy_disable_cod');
 function hoopsy_disable_cod(array $available_gateways): array
@@ -544,6 +550,10 @@ function hoopsy_hurrystock_js(): void {
           var out = el.querySelector('.dn-hurrystock-num');
           if (out) out.textContent = String(n);
         });
+        var stickyNum = document.querySelector('.kc-sticky-atc__stock-num');
+        if(stickyNum) stickyNum.textContent = String(n);
+        var mainAtcNum = document.querySelector('.hoopsy-atc-stock-num');
+        if(mainAtcNum) mainAtcNum.textContent = String(n);
       }
 
       function syncFromSource(){
@@ -570,6 +580,13 @@ function hoopsy_hurrystock_js(): void {
 
       function boot(){
         moveBadgeIntoPrice();
+        var mainAtc = document.querySelector('.single_add_to_cart_button');
+        if(mainAtc && !mainAtc.querySelector('.hoopsy-atc-stock')){
+          var s = document.createElement('span');
+          s.className = 'hoopsy-atc-stock';
+          s.innerHTML = '(Pozostało <span class="hoopsy-atc-stock-num">10</span> szt.)';
+          mainAtc.appendChild(s);
+        }
         var span = syncFromSource();
 
         if(span){
@@ -629,6 +646,7 @@ function hoopsy_sticky_atc(): void {
       <div class="kc-sticky-atc__left">
         <div class="kc-sticky-atc__line1">
           <span class="kc-sticky-atc__price"><?php echo wp_kses_post($price_html); ?></span>
+          <span class="kc-sticky-atc__stock">(<span class="kc-sticky-atc__stock-num">10</span> szt.)</span>
         </div>
 
         <div class="kc-sticky-atc__line2">

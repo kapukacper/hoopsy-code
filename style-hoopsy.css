@@ -738,6 +738,18 @@ h2.wcqcs-cross-sells-title,
   position: relative;
   z-index: 1;
 }
+.hoopsy-atc-stock {
+  display: none;
+}
+@media (min-width: 769px) {
+  .hoopsy-atc-stock {
+    display: block;
+    color: rgba(255,255,255,.85);
+    font-weight: 400;
+    font-size: 0.85em;
+    margin-top: 2px;
+  }
+}
 
 /* ===================== CUSTOM RATING HOOPSY ===================== */
 .woocommerce-product-rating {
@@ -1985,7 +1997,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
         flex-direction: column;
         gap: 4px;
         min-width: 0;
-        flex: 1 1 auto;
+        flex: 0 0 auto;
     }
 
     .kc-sticky-atc__line1 {
@@ -2000,6 +2012,13 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
         font-size: 14px;
         line-height: 1.1;
         color: rgba(0,0,0,.85);
+        white-space: nowrap;
+    }
+    .kc-sticky-atc__stock {
+        font-size: 13px;
+        color: rgba(0,0,0,.68);
+        font-weight: 400;
+        margin-left: -4px;
         white-space: nowrap;
     }
     .kc-sticky-atc__price del,
@@ -2017,6 +2036,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     .kc-sticky-atc__line2 {
         font-size: 13px;
         line-height: 1.1;
+        margin-top: -2px;
         color: rgba(0,0,0,.68);
         white-space: nowrap;
         overflow: visible;
@@ -2057,15 +2077,14 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     .kc-sticky-atc__right {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        flex: 0 0 44%;
-        min-width: 170px;
+        flex: 1 1 0;
+        min-width: 0;
     }
 
     .kc-sticky-atc__btn {
         height: 38px !important;
         width: 100%;
-        min-width: 170px;
+        min-width: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -2100,6 +2119,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 /* CZĘŚĆ 5: HURRYSTOCK BADGE (przeniesione z inline PHP)         */
 /* ============================================================ */
 body.single-product .summary.entry-summary .dn-price-hs--standalone { display: none; }
+#DropNinja_HurryStock_Shortcode_7866 { position: absolute; left: -9999px; height: 0; overflow: hidden; }
 
 body.single-product .summary.entry-summary p.price.dn-price-hs-row {
     display: flex !important;
@@ -2134,7 +2154,7 @@ body.single-product .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs 
     color: #fff;
     border-radius: 12px;
     padding: 7px 14px;
-    font-size: 14px;
+    font-size: 15px !important;
     line-height: 1;
     white-space: nowrap;
     position: relative;
@@ -2142,14 +2162,16 @@ body.single-product .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs 
 }
 
 .dn-hurrystock-label,
-.dn-hurrystock-suffix { opacity: .95; }
+.dn-hurrystock-suffix { opacity: .95; font-size: 1.05em !important; }
 
 .dn-hurrystock-num { font-weight: 700; text-align: left; }
 
 @keyframes dnIconPulse {
-    0%   { opacity: 1;   transform: translateY(-50%) rotate(-10deg) scale(1); }
-    50%  { opacity: .70; transform: translateY(-50%) rotate(-10deg) scale(1.04); }
-    100% { opacity: 1;   transform: translateY(-50%) rotate(-10deg) scale(1); }
+    0%   { transform: translateY(-50%) rotate(-8deg); }
+    25%  { transform: translateY(-50%) rotate(5deg); }
+    50%  { transform: translateY(-50%) rotate(-8deg); }
+    75%  { transform: translateY(-50%) rotate(3deg); }
+    100% { transform: translateY(-50%) rotate(-8deg); }
 }
 
 .dn-hurrystock-inline.dn-hurrystock-sale::after {
@@ -2160,7 +2182,7 @@ body.single-product .summary.entry-summary p.price.dn-price-hs-row .dn-price-hs 
     width: 29px;
     height: 29px;
     transform: translateY(-50%) rotate(-10deg);
-    transform-origin: 50% 50%;
+    transform-origin: 0% 0%;
     background-image: url('https://medicane.pl/wp-content/uploads/2026/01/discount_10703149.png');
     background-size: contain;
     background-repeat: no-repeat;
