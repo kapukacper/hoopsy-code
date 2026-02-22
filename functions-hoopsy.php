@@ -656,8 +656,9 @@ function hoopsy_sticky_atc(): void {
     var formCart = document.querySelector('form.cart, form.variations_form');
     var scrollTarget = formCart || document.querySelector('.single_add_to_cart_button') || document.querySelector('form.cart');
 
+    var allBullets = document.querySelectorAll('.hoopsy-bullet');
+    var lastBullet = allBullets.length ? allBullets[allBullets.length - 1] : null;
     var mainBtn = document.querySelector('.single_add_to_cart_button');
-    var ebookBox = document.querySelector('.hoopsy-gratis-box');
 
     function toggleSticky(){
       if(!MQ.matches){
@@ -669,19 +670,14 @@ function hoopsy_sticky_atc(): void {
 
       var show = false;
 
-      if(ebookBox){
-        var ebookRect = ebookBox.getBoundingClientRect();
-        if(ebookRect.top + 65 < window.innerHeight) show = true;
-      }
-      else if(mainBtn){
-        var btnRect = mainBtn.getBoundingClientRect();
-        if(btnRect.bottom < 0) show = true;
+      if(lastBullet){
+        var bRect = lastBullet.getBoundingClientRect();
+        if(bRect.bottom < window.innerHeight) show = true;
       }
 
-      if(mainBtn && show){
-        var btnRect2 = mainBtn.getBoundingClientRect();
-        var inView = btnRect2.top < window.innerHeight && btnRect2.bottom > 0;
-        if(inView) show = false;
+      if(mainBtn){
+        var mRect = mainBtn.getBoundingClientRect();
+        if(mRect.top < window.innerHeight && mRect.bottom > 0) show = false;
       }
 
       if(show){
