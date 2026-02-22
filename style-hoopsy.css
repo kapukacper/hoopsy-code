@@ -1562,6 +1562,13 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   opacity: 0.8;
   margin-left: 4px;
 }
+.hoopsy-timer-colon {
+  animation: timer-colon-blink 1s step-end infinite;
+}
+@keyframes timer-colon-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 
 /* ===================== MOBILE: REORDER CHECKOUT ===================== */
 /* CSS order zamiast JS reorder → brak flasha (opacity:0 usunięte) */

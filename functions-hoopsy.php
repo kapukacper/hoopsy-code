@@ -856,7 +856,7 @@ function hoopsy_checkout_js(): void {
             productsTable.append(tbody.detach());
             productsBox.append(productsTable);
 
-            var deliveryHeader = $('<div class="hoopsy-delivery-header-el hoopsy-box-header"><span class="hoopsy-step-num">1</span> KOSZYK <span class="hoopsy-header-timer">(REZERWACJA <span class="hoopsy-timer-value">9:59</span>)</span></div>');
+            var deliveryHeader = $('<div class="hoopsy-delivery-header-el hoopsy-box-header"><span class="hoopsy-step-num">1</span> KOSZYK <span class="hoopsy-header-timer">(REZERWACJA <span class="hoopsy-timer-value">4<span class="hoopsy-timer-colon">:</span>59</span>)</span></div>');
             table.before(deliveryHeader);
             table.after(productsBox);
             table.find('thead').hide();
@@ -957,13 +957,13 @@ function hoopsy_checkout_js(): void {
         $(window).on('resize', function () { mobileReorder(); });
 
         // Timer rezerwacji w nagłówku (10 min, po 0 resetuje cicho)
-        var hoopsyTimerSeconds = 599;
+        var hoopsyTimerSeconds = 299;
         setInterval(function () {
             hoopsyTimerSeconds--;
-            if (hoopsyTimerSeconds <= 0) hoopsyTimerSeconds = 599;
+            if (hoopsyTimerSeconds <= 0) hoopsyTimerSeconds = 299;
             var m = Math.floor(hoopsyTimerSeconds / 60);
             var s = hoopsyTimerSeconds % 60;
-            $('.hoopsy-timer-value').text(m + ':' + (s < 10 ? '0' : '') + s);
+            $('.hoopsy-timer-value').html(m + '<span class="hoopsy-timer-colon">:</span>' + (s < 10 ? '0' : '') + s);
         }, 1000);
 
         $(document).on('click', '.hoopsy-qty-btn', function () {
