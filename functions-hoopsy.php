@@ -865,7 +865,7 @@ function hoopsy_checkout_js(): void {
             if (!tbody.length || !tbody.find('tr').length) return;
 
             var productsBox = $('<div class="hoopsy-products-box"></div>');
-            productsBox.append('<div class="hoopsy-box-header"><span class="hoopsy-step-num">2</span> DOSTAWA I PODSUMOWANIE</div>');
+            productsBox.append('<div class="hoopsy-box-header"><span class="hoopsy-step-num">3</span> DOSTAWA I PODSUMOWANIE</div>');
             var productsTable = $('<table class="hoopsy-box-table"></table>');
             productsTable.append(tbody.detach());
             productsBox.append(productsTable);
@@ -877,7 +877,7 @@ function hoopsy_checkout_js(): void {
 
             // Box zwrotów pod DOSTAWA I PODSUMOWANIE
             $('.hoopsy-returns-box').remove();
-            var returnsBox = $('<div class="hoopsy-returns-box"><img class="hoopsy-returns-icon" src="<?= esc_url(HOOPSY_LOGO_WYGODNE_ZWROTY) ?>" alt="Wygodne Zwroty"><div class="hoopsy-returns-text"><span class="hoopsy-returns-desc">Zasady zwrotu w naszym sklepie?</span><span class="hoopsy-returns-desc"><strong>Masz 30 dni od otrzymania paczki.</strong></span></div></div>');
+            var returnsBox = $('<div class="hoopsy-returns-box"><img class="hoopsy-returns-icon" src="<?= esc_url(HOOPSY_LOGO_WYGODNE_ZWROTY) ?>" alt="Wygodne Zwroty"><div class="hoopsy-returns-text"><span class="hoopsy-returns-desc">U nas zwrot towaru jest prosty!</span><span class="hoopsy-returns-desc"><strong>Masz 30 dni - My zwracamy środki</strong></span></div></div>');
             productsBox.after(returnsBox);
 
             // Kreska + rabat pod produktami w KOSZYK
@@ -923,7 +923,7 @@ function hoopsy_checkout_js(): void {
 
         var billingH3 = $('.woocommerce-billing-fields h3');
         if (billingH3.length && !billingH3.find('.hoopsy-step-num').length) {
-            billingH3.prepend('<span class="hoopsy-step-num">3</span> ');
+            billingH3.prepend('<span class="hoopsy-step-num">2</span> ');
         }
 
         mobileReorder();
@@ -945,10 +945,18 @@ function hoopsy_checkout_js(): void {
             var customerDetails = $('#customer_details');
             var col1 = customerDetails.children('.col-1');
             if (!col1.length) return;
+            var deliveryHeader = $('.hoopsy-delivery-header-el');
+            var reviewTable = $('.woocommerce-checkout-review-order-table');
+            var productsBox = $('.hoopsy-products-box');
+            var returnsBox = $('.hoopsy-returns-box');
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
             var trustBox = $('.hoopsy-trust-box');
             var contactBox = $('.hoopsy-contact-box');
+            customerDetails.append(deliveryHeader);
+            customerDetails.append(reviewTable);
+            customerDetails.append(productsBox);
+            customerDetails.append(returnsBox);
             customerDetails.append(paymentHeader);
             customerDetails.append(payment);
             customerDetails.append(trustBox);
@@ -958,10 +966,18 @@ function hoopsy_checkout_js(): void {
         function desktopReorder() {
             currentLayout = 'desktop';
             var orderReview = $('#order_review');
+            var deliveryHeader = $('.hoopsy-delivery-header-el');
+            var reviewTable = $('.woocommerce-checkout-review-order-table');
+            var productsBox = $('.hoopsy-products-box');
+            var returnsBox = $('.hoopsy-returns-box');
             var paymentHeader = $('.hoopsy-payment-header');
             var payment = $('#payment');
             var trustBox = $('.hoopsy-trust-box');
             var contactBox = $('.hoopsy-contact-box');
+            orderReview.append(deliveryHeader);
+            orderReview.append(reviewTable);
+            orderReview.append(productsBox);
+            orderReview.append(returnsBox);
             orderReview.append(paymentHeader);
             orderReview.append(payment);
             orderReview.append(trustBox);

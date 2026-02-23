@@ -926,7 +926,7 @@ h2.wcqcs-cross-sells-title,
   border-radius: 16px !important;
   overflow: hidden !important;
   padding: 0 !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
   transition: all 0.3s ease;
   overflow: hidden !important;
@@ -1190,7 +1190,7 @@ h3#order_review_heading {
 
 /* === BOX 1: TWOJE PRODUKTY === */
 .hoopsy-products-box {
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
 }
 
 /* === BOX ZWROTÓW === */
@@ -1203,7 +1203,7 @@ h3#order_review_heading {
   border-radius: 16px !important;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
   padding: 13px 20px !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
   box-sizing: border-box !important;
 }
 .hoopsy-returns-icon {
@@ -1246,7 +1246,7 @@ h3#order_review_heading {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
   padding: 13px 20px !important;
   margin-top: 0 !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
   box-sizing: border-box !important;
 }
 .hoopsy-trust-item {
@@ -1346,7 +1346,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   border-top: none !important;
   border-radius: 0 0 16px 16px !important;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
   width: 100% !important;
@@ -1404,7 +1404,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
   border-top: none !important;
   border-radius: 0 0 16px 16px !important;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 19px !important;
   padding: 20px 20px 0 20px !important;
   box-sizing: border-box !important;
 }
@@ -1590,22 +1590,30 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     display: flex !important;
     flex-direction: column !important;
   }
+  #customer_details {
+    padding: 0 !important;
+  }
+  #customer_details .col-1 {
+    padding: 0 !important;
+  }
+  #customer_details .col-2 {
+    display: none !important;
+  }
+  /* Kolejność mobile: KOSZYK → ZWROTY → DANE → DOSTAWA → TRUST → PŁATNOŚCI */
+  #customer_details .hoopsy-delivery-header-el { order: 1 !important; margin-top: -20px !important; }
+  #customer_details .woocommerce-checkout-review-order-table { order: 2 !important; }
+  #customer_details .hoopsy-returns-box { order: 3 !important; }
   #customer_details .col-1 {
     width: 100% !important;
     float: none !important;
-    order: 2 !important;
+    order: 4 !important;
   }
-  #customer_details .col-2 {
-    width: 100% !important;
-    float: none !important;
-    order: 1 !important;
-  }
-  /* Payment przenoszone przez JS — niech ma odpowiedni order */
-  #customer_details .hoopsy-trust-box { order: 3 !important; }
-  #customer_details .hoopsy-payment-header { order: 4 !important; }
-  #customer_details #payment { order: 5 !important; }
+  #customer_details .hoopsy-products-box { order: 5 !important; margin-bottom: -1px !important; }
+  #customer_details .hoopsy-trust-box { order: 6 !important; }
+  #customer_details .hoopsy-payment-header { order: 7 !important; }
+  #customer_details #payment { order: 8 !important; }
   #customer_details .hoopsy-contact-box {
-    order: 6 !important;
+    order: 10 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1615,7 +1623,7 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
     padding: 13px 20px !important;
     margin-top: 0 !important;
-    margin-bottom: 24px !important;
+    margin-bottom: 19px !important;
   }
   .hoopsy-contact-box .hoopsy-contact-icon {
     height: 26px !important;
@@ -1699,6 +1707,16 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
     display: none !important;
 }
 
+/* Ukryj ×, kolumnę Kwota + nagłówki tabeli */
+.woocommerce-cart td.product-remove,
+.woocommerce-cart td.product-subtotal,
+.woocommerce-cart th.product-subtotal {
+    display: none !important;
+}
+.woocommerce-cart table.shop_table.cart thead {
+    display: none !important;
+}
+
 .woocommerce-cart-form .product-thumbnail img {
     width: 20% !important;
     height: auto !important;
@@ -1707,6 +1725,43 @@ table.hoopsy-box-table tr.woocommerce-shipping-totals ul#shipping_method {
 @media screen and (max-width: 768px) {
     .checkout-button { margin-top: 0 !important; }
     .woocommerce-cart-form { margin-top: -30px !important; }
+}
+
+/* Zdjęcie obok nazwy produktu (mobile koszyk) */
+@media (max-width: 768px) {
+    .woocommerce-cart tr.cart_item {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        position: relative;
+    }
+    .woocommerce-cart tr.cart_item td.product-thumbnail {
+        flex: 0 0 auto !important;
+        padding-right: 0 !important;
+        width: auto !important;
+    }
+    .woocommerce-cart tr.cart_item td.product-thumbnail::before {
+        display: none !important;
+    }
+    .woocommerce-cart tr.cart_item td.product-thumbnail img {
+        width: 76px !important;
+        height: 76px !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+    }
+    .woocommerce-cart tr.cart_item td.product-name {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        padding-left: 12px !important;
+        text-align: left !important;
+    }
+    .woocommerce-cart tr.cart_item td.product-name::before {
+        display: none !important;
+    }
+    .woocommerce-cart tr.cart_item td.product-price,
+    .woocommerce-cart tr.cart_item td.product-quantity {
+        flex: 0 0 100% !important;
+    }
 }
 
 /* --- stabilne proporcje obrazków --- */
